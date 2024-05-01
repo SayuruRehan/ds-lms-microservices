@@ -6,7 +6,7 @@ mongoose.set('strictQuery', false);
 export const connectDB = async () => {
   return new Promise((resolve, reject) => {
     config();
-    const uri = process.env.MONGO_URI || '';
+    const uri = process.env.AUTH_MONGO_URI || '';
     if (!uri) {
       reject(new Error('MongoDB URI is not defined in Auth server'));
     }
