@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 import express from "express";
 import httpProxy from "http-proxy";
-import { authenticate } from "./middlewares/auth.js";
+import { authenticate } from "./middlewares/authenticate.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
