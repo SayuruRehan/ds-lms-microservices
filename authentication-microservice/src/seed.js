@@ -17,14 +17,14 @@ const admin = {
     try {
       // Insert seed data
       await User.create(admin);
-
+  
       console.log('Database seeded successfully.');
     } catch (error) {
       console.error('Error seeding database:', error);
       throw error; // Throw error to indicate failure
     }
   }
-
+  
   // Reset and seed the database
   async function resetAndSeedDatabase() {
     try {
@@ -37,6 +37,6 @@ const admin = {
       mongoose.disconnect();
     }
   }
-
+  
   // Reset and seed the database
   resetAndSeedDatabase();

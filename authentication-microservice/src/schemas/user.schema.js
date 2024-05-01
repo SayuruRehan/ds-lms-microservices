@@ -24,10 +24,10 @@ const userSchema = new Schema({
   role: {
     type: String,
     enum: {
-      values: ['user', 'instructor', 'admin'],
+      values: ['learner', 'instructor', 'admin'],
       message: 'Invalid role type.'
     },
-    default: 'user'
+    default: 'learner'
   }
 })
 
