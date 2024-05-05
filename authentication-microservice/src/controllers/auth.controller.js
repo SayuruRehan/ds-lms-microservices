@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../schemas/user.schema.js";
+import { config } from "dotenv";
+
+config();
 
 const generateToken = (res, userId, role) => {
   const jwtSecret = process.env.JWT_SECRET;
