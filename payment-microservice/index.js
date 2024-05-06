@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
-const stripe = require("stripe")("your_stripe_secret_key");
 const PORT = process.env.PAYMENT_PORT || 5001;
 
 // Import MongoDB client
