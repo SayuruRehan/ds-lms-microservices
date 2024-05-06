@@ -28,9 +28,9 @@ const courseSchema = new mongoose.Schema({
   lectureNotes: {
     type: String, // Assuming lectureNotes is a file path
     required: true,
-  },
+  }
 });
 
-const Course = mongoose.model("Lecture", courseSchema); // Changed model name
+const Course = mongoose.model("course", courseSchema);
 
 module.exports = Course;
