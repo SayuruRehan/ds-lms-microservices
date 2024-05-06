@@ -1,48 +1,57 @@
 require("dotenv").config();
-
 const express = require("express");
-const stripe = require("stripe")("your_stripe_secret_key");
-
 const app = express();
+
+const stripe = require("stripe")("your_stripe_secret_key");
+const PORT = process.env.PAYMENT_PORT || 5001;
+
+// Import MongoDB client
+const {connectToDB} = require("./config/db");
+
+// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Route for processing payments
-app.post("/payment", async (req, res) => {
-  const {cardNumber, expMonth, expYear, cvc, amount, currency} = req.body;
+// Middleware to set headers for CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // Allow specified methods
+  next();
+});
 
-  try {
-    // Use Stripe to process payment
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: currency,
-      payment_method_data: {
-        type: "card",
-        card: {
-          number: cardNumber,
-          exp_month: expMonth,
-          exp_year: expYear,
-          cvc: cvc,
-        },
-      },
+// MongoDB connection URL
+const mongoURL = process.env.PAYMENT_MONGO_URI;
+
+// Connect to MongoDB
+connectToDB(mongoURL)
+  .then((client) => {
+    // Define the route
+    app.get("/", (req, res) => {
+      res.send("Welcome To Payment-microservice");
     });
 
-    // Payment success
-    res.status(200).json({message: "Payment successful", paymentIntent});
-  } catch (error) {
-    console.error("Error processing payment:", error);
-    res
-      .status(500)
-      .json({error: "An error occurred while processing your payment"});
-  }
-});
+    //payment service
+    app.use("/api/payment", authMiddleware, require("./routes/paymentRoutes"));
 
-// Route for admin to view payments
-app.get("/admin/payments", (req, res) => {
-  // Implement logic to fetch and return payments
-  res.status(200).json({message: "Admin view payments"});
-});
+    // Define a route to test MongoDB connection (currently there is a problem, need to be fixed)
+    app.get("/test-mongodb", async (req, res) => {
+      try {
+        const db = client.db(); // Access the database
+        const collection = db.collection("payments"); // Access a collection
+        const result = await collection.find({}).toArray(); // Perform a query
+        res.json(result); // Send the result as JSON
+      } catch (error) {
+        console.error("Error querying MongoDB:", error);
+        res.status(500).json({error: "Error querying MongoDB"});
+      }
+    });
 
-const PORT = process.env.PAYMENT_PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    // Handle error
+    process.exit(1); // Exit the process if MongoDB connection fails
+  });
