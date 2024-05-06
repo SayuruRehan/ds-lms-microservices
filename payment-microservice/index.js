@@ -1,6 +1,4 @@
-import {config} from "dotenv";
-
-config();
+require("dotenv").config();
 
 const express = require("express");
 const stripe = require("stripe")("your_stripe_secret_key");
