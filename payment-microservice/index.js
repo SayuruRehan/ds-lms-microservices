@@ -30,7 +30,7 @@ connectToDB(mongoURL)
     });
 
     //payment service
-    app.use("/api/payment", authMiddleware, require("./routes/paymentRoutes"));
+    app.use("/api/payment", require("./routes/paymentRoutes"));
 
     // Define a route to test MongoDB connection (currently there is a problem, need to be fixed)
     app.get("/test-mongodb", async (req, res) => {
