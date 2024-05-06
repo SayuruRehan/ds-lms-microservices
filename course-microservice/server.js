@@ -4,7 +4,6 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
-const { saveImageToProfile } = require("./controllers/profileController");
 
 dotenv.config();
 
@@ -20,11 +19,14 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // Routes for User Management
-app.use("/api/v1/user", require("./routes/userRoutes"));
-// Add routes for Profile Management
-const profileRouter = require("./routes/profileRoutes");
-app.use("/api/v1/profile", profileRouter);
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/v1/user", userRoutes);
 
+// Routes for Profile Management
+const profileRoutes = require("./routes/profileRoutes");
+app.use("/api/v1/profile", profileRoutes);
+
+// Routes for Course Management
 const courseRoutes = require("./routes/courseRoutes");
 app.use("/api/v1/course", courseRoutes);
 

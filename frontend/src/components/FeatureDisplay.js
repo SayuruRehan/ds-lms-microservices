@@ -13,7 +13,7 @@ const FeatureDisplay = () => {
       <div className="p-4">
         <h2 className="text-2xl font-bold mb-4">Explore the Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link to="/apod">
+          <Link to="/addCourse">
             <FeatureCard
               title="Add course"
               description="Add course"
@@ -29,7 +29,7 @@ const FeatureDisplay = () => {
           </Link>
         </div>
       </div>
-      <Footer /> {/* Include the Footer component */}
+      <Footer />
     </div>
   );
 };
