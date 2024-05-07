@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const dbconfig = require("./configs/DBConnect");
+const dbconfig = require("./config/DBConnect");
 const learnerController = require("./controllers/learnerController");
 
 app.use(express.json());

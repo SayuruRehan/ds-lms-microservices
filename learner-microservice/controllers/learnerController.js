@@ -2,12 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Learner = require("../models/learnerSchema");
 
-// Enroll student into a course
-router.post("course/enroll", async (req, res) => {
+// Enroll course
+router.post("/course/enroll", async (req, res) => {
   try {
-    const { learnerId, courseId } = req.body;
+    const { learnerId } = req.body;
+    const courseId = req.query.courseId;
 
-    // Check if the learner and course exist
+    if (!courseId) {
+      return res.status(400).json({ error: "Course ID is required" });
+    }
+
+    // Check if the exist
     const learner = await Learner.findById(learnerId);
 
     if (!learner) {
