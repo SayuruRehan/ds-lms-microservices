@@ -9,6 +9,7 @@ const AddCourseForm = () => {
     duration: "",
     level: "",
     price: 0,
+    lectureNotes: null, // Add lectureNotes field to hold the file
   });
 
   const handleChange = (e) => {
@@ -16,10 +17,28 @@ const AddCourseForm = () => {
     setCourseData({ ...courseData, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setCourseData({ ...courseData, lectureNotes: file });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:4003/api/v1/course/add", courseData);
+      const formData = new FormData();
+      formData.append("title", courseData.title);
+      formData.append("instructor", courseData.instructor);
+      formData.append("description", courseData.description);
+      formData.append("duration", courseData.duration);
+      formData.append("level", courseData.level);
+      formData.append("price", courseData.price);
+      formData.append("lectureNotes", courseData.lectureNotes); // Append lectureNotes file to formData
+
+      await axios.post("http://localhost:4003/api/v1/course/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("Course added successfully!");
       // Optionally, you can redirect the user to another page or perform any other action here
     } catch (error) {
@@ -97,6 +116,16 @@ const AddCourseForm = () => {
             name="price"
             value={courseData.price}
             onChange={handleChange}
+            required
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          />
+        </label>
+        <label className="block">
+          Lecture Notes:
+          <input
+            type="file"
+            name="lectureNotes"
+            onChange={handleFileChange}
             required
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
           />

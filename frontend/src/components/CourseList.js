@@ -22,32 +22,42 @@ function CourseList() {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-red-500">{error}</div>;
   }
 
   return (
-    <div>
-      <h1>Course List</h1>
-      <div>
+    <div className="container mx-auto">
+      <h1 className="text-3xl font-semibold mb-6">Course List</h1>
+      <div className="grid gap-6">
         {courses.map((course, index) => (
-          <div key={index}>
-            <h2>Title: {course.title}</h2>
-            <p>Instructor: {course.instructor}</p>
-            <p>Description: {course.description}</p>
-            <p>Duration: {course.duration}</p>
-            <p>Level: {course.level}</p>
-            <p>Price: ${course.price}</p>
-            <p>Lecture Notes: {getFileName(course.lectureNotes)}</p>
+          <div key={index} className="bg-white shadow-md rounded-md p-6">
+            <h2 className="text-xl font-semibold mb-2">
+              Title: {course.title}
+            </h2>
+            <p className="mb-2">Instructor: {course.instructor}</p>
+            <p className="mb-2">Description: {course.description}</p>
+            <p className="mb-2">Duration: {course.duration}</p>
+            <p className="mb-2">Level: {course.level}</p>
+            <p className="mb-2">Price: ${course.price}</p>
+            <p className="mb-2">
+              Lecture Notes:{" "}
+              <a
+                href={`http://localhost:4003/${course.lectureNotes.replace(
+                  "\\",
+                  "/"
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                View PDF
+              </a>
+            </p>
           </div>
         ))}
       </div>
     </div>
   );
-}
-
-function getFileName(filePath) {
-  // Extract file name from file path
-  return filePath.split("/").pop();
 }
 
 export default CourseList;
