@@ -1,23 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const Learner = require("../models/learnerSchema");
-const Course = require("../models/courseSchema");
 
 // Enroll student into a course
-router.post("/enroll", async (req, res) => {
+router.post("course/enroll", async (req, res) => {
   try {
     const { learnerId, courseId } = req.body;
 
     // Check if the learner and course exist
     const learner = await Learner.findById(learnerId);
-    const course = await Course.findById(courseId);
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
-    }
-
-    if (!course) {
-      return res.status(404).json({ error: "Course not found" });
     }
 
     // Check if the learner is already enrolled in the course
