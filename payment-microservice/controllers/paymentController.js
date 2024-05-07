@@ -28,6 +28,7 @@ const addPayment = async (req, res) => {
     res.json({sessionId: session.id});
   } catch (error) {
     console.error("Error creating checkout session:", error);
+    // https://checkout.stripe.com/pay/:session_id us this in front end or install dependency
     res
       .status(500)
       .json({error: "An error occurred while creating checkout session"});
