@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import AddCourseForm from "./components/AddCourseForm";
 import CourseList from "./components/CourseList";
+import UploadVideo from "./components/UploadVideo";
 
 import FeatureDisplay from "./components/FeatureDisplay";
 
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/features" element={<FeatureDisplay />} />
         <Route path="/addCourse" element={<AddCourseForm />} />
         <Route path="/list" element={<CourseList />} />
+        <Route path="/video" element={<UploadVideo />} />
       </Routes>
     </Router>
   );
