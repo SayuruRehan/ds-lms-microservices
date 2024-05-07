@@ -7,39 +7,74 @@ const multer = require("multer"); // Import multer
 // Multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "Lectures"); // Specify the destination folder
+    if (file.fieldname === "lectureNotes") {
+      cb(null, "Lectures"); // Specify the destination folder for lecture notes
+    } else if (file.fieldname === "lectureVideos") {
+      cb(null, "Videos"); // Specify the destination folder for lecture videos
+    }
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
     const fileName = path.basename(file.originalname, ext);
-    // Generate unique filename
-    cb(null, `${fileName}-${Date.now()}${ext}`);
+    cb(null, `${fileName}-${Date.now()}${ext}`); // Generate unique filename
   },
 });
 
-// Create upload middleware
 const upload = multer({ storage: storage });
 
-// Serve files stored in the VS Code folder
+// Serve files stored in the respective folders
 router.use(
   "/lectureNotes",
   express.static(path.join(__dirname, "../Lectures"))
 );
+router.use("/lectureVideos", express.static(path.join(__dirname, "../Videos")));
 
-// Create a new course with file upload
-router.post("/add", upload.single("lectureNotes"), async (req, res) => {
-  try {
-    const courseData = req.body;
-    // Append the file path to the course data
-    courseData.lectureNotes = req.file.path;
+router.post(
+  "/add",
+  upload.fields([{ name: "lectureNotes" }, { name: "lectureVideos" }]),
+  async (req, res) => {
+    try {
+      const courseData = req.body;
+      const lectureNotes = req.files["lectureNotes"];
+      const lectureVideos = req.files["lectureVideos"];
 
-    const course = new Course(courseData);
-    await course.save();
-    res.status(201).send(course);
-  } catch (error) {
-    res.status(400).send(error);
+      // Process lecture notes
+      if (lectureNotes && lectureNotes.length > 0) {
+        courseData.lectureNotes = lectureNotes.map((file) => file.path);
+      }
+
+      // Process lecture videos
+      if (lectureVideos && lectureVideos.length > 0) {
+        courseData.lectureVideos = lectureVideos.map((file) => file.path);
+
+        // Save lecture videos to LectureVideos model
+        const lectureVideoPromises = lectureVideos.map(async (video) => {
+          try {
+            const lectureVideo = new LectureVideos({
+              courseName: req.body.courseName,
+              lectureVideos: video.path,
+            });
+
+            console.log(lectureVideo);
+            await lectureVideo.save();
+          } catch (error) {
+            console.error("Error saving lecture video:", error);
+          }
+        });
+
+        await Promise.all(lectureVideoPromises);
+      }
+
+      const course = new Course(courseData);
+      await course.save();
+
+      res.status(201).send(course);
+    } catch (error) {
+      console.error("Error uploading data:", error);
+      res.status(500).send({ error: "Error uploading data" });
+    }
   }
-});
+);
 
 // Route to retrieve all courses
 router.get("/get", async (req, res) => {

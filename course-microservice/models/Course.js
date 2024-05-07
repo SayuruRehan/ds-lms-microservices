@@ -38,6 +38,10 @@ const courseSchema = new mongoose.Schema({
     enum: ["pending", "approved", "rejected"],
     default: "pending",
   },
+  lectureVideos: {
+    type: String,
+    required: true,
+  },
 });
 
 const Course = mongoose.model("course", courseSchema);
