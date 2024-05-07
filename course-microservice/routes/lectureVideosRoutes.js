@@ -37,7 +37,7 @@ router.post("/add", upload.single("lectureVideos"), async (req, res) => {
     res.status(201).send(lectureVideo);
   } catch (error) {
     console.error("Error uploading lecture video:", error);
-    res.status(500).send({ error: "Internal server error" });
+    res.status(500).send({ error: "Error uploading lecture video" });
   }
 });
 
@@ -54,7 +54,7 @@ router.get("/list", async (req, res) => {
     res.status(200).send(lectureVideos);
   } catch (error) {
     console.error("Error fetching lecture videos:", error);
-    res.status(500).send({ error: "Internal server error" });
+    res.status(500).send({ error: "Error fetching lecture videos" });
   }
 });
 

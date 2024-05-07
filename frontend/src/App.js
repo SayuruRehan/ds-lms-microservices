@@ -8,7 +8,7 @@ import Profile from "./pages/Profile";
 import AddCourseForm from "./components/AddCourseForm";
 import CourseList from "./components/CourseList";
 import UploadVideo from "./components/UploadVideo";
-import VideoList from "./components/VideoList";
+import LectureVideos from "./components/LectureVideos";
 
 import FeatureDisplay from "./components/FeatureDisplay";
 
@@ -45,7 +45,7 @@ export default function App() {
         <Route path="/addCourse" element={<AddCourseForm />} />
         <Route path="/list" element={<CourseList />} />
         <Route path="/video" element={<UploadVideo />} />
-        <Route path="/vlist" element={<VideoList />} />
+        <Route path="/vlist" element={<LectureVideos />} />
       </Routes>
     </Router>
   );
