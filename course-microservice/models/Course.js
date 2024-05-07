@@ -42,6 +42,10 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  preview: {
+    type: String,
+    required: true,
+  },
 });
 
 const Course = mongoose.model("course", courseSchema);

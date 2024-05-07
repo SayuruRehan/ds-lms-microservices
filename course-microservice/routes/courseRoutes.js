@@ -4,7 +4,6 @@ const Course = require("../models/Course");
 const path = require("path");
 const multer = require("multer");
 
-
 // Multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -12,6 +11,8 @@ const storage = multer.diskStorage({
       cb(null, "Lectures"); // Specify the destination folder for lecture notes
     } else if (file.fieldname === "lectureVideos") {
       cb(null, "Videos"); // Specify the destination folder for lecture videos
+    } else if (file.fieldname === "preview") {
+      cb(null, "Preview"); // Specify the destination folder for lecture videos
     }
   },
   filename: function (req, file, cb) {
@@ -29,15 +30,21 @@ router.use(
   express.static(path.join(__dirname, "../Lectures"))
 );
 router.use("/lectureVideos", express.static(path.join(__dirname, "../Videos")));
+router.use("/preview", express.static(path.join(__dirname, "../Preview")));
 
 router.post(
   "/add",
-  upload.fields([{ name: "lectureNotes" }, { name: "lectureVideos" }]),
+  upload.fields([
+    { name: "lectureNotes" },
+    { name: "lectureVideos" },
+    { name: "preview" },
+  ]),
   async (req, res) => {
     try {
       const courseData = req.body;
       const lectureNotes = req.files["lectureNotes"];
       const lectureVideos = req.files["lectureVideos"];
+      const preview = req.files["preview"];
 
       // Process lecture notes
       if (lectureNotes && lectureNotes.length > 0) {
@@ -51,6 +58,10 @@ router.post(
         courseData.lectureVideos = lectureVideos
           .map((file) => file.path)
           .join(",");
+      }
+      //Process Thumbnail
+      if (preview && preview.length > 0) {
+        courseData.preview = preview.map((file) => file.path).join(",");
       }
 
       const course = new Course(courseData);
