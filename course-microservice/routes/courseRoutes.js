@@ -33,4 +33,13 @@ router.post("/add", upload.single("lectureNotes"), async (req, res) => {
   }
 });
 
+// Route to retrieve all courses
+router.get("/get", async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.status(200).send(courses);
+  } catch (error) {
+    res.status(500).send({ error: "Error fetching courses" });
+  }
+});
 module.exports = router;

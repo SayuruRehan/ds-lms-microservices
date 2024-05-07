@@ -1,75 +1,53 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // You may need to install axios: npm install axios
+import axios from "axios";
 
-const CourseList = () => {
+function CourseList() {
   const [courses, setCourses] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4003/api/v1/course");
-        setCourses(response.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchData();
+    fetchCourses();
   }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4003/api/v1/course/get"
+      );
+      setCourses(response.data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      setError("Error fetching courses. Please try again later.");
+    }
+  };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
-      <h2>Course List</h2>
-      <ul>
-        {courses.map((course) => (
-          <li key={course._id}>
-            <h3>{course.title}</h3>
-            <p>
-              <strong>Instructor:</strong> {course.instructor}
-            </p>
-            <p>
-              <strong>Description:</strong> {course.description}
-            </p>
-            <p>
-              <strong>Duration:</strong> {course.duration}
-            </p>
-            <p>
-              <strong>Level:</strong> {course.level}
-            </p>
-            <p>
-              <strong>Price:</strong> ${course.price}
-            </p>
-            <p>
-              <strong>Lecture Notes:</strong>
-            </p>
-            <ul>
-              <li>Title: {course.lectureNotes.title}</li>
-              <li>Description: {course.lectureNotes.description}</li>
-              {course.lectureNotes.file && (
-                <>
-                  {course.lectureNotes.file.contentType ===
-                    "application/pdf" && (
-                    <li>
-                      <a
-                        href={`data:${
-                          course.lectureNotes.file.contentType
-                        };base64,${Buffer.from(
-                          course.lectureNotes.file.data
-                        ).toString("base64")}`}
-                        download
-                      >
-                        Download PDF
-                      </a>
-                    </li>
-                  )}
-                </>
-              )}
-            </ul>
-          </li>
+      <h1>Course List</h1>
+      <div>
+        {courses.map((course, index) => (
+          <div key={index}>
+            <h2>Title: {course.title}</h2>
+            <p>Instructor: {course.instructor}</p>
+            <p>Description: {course.description}</p>
+            <p>Duration: {course.duration}</p>
+            <p>Level: {course.level}</p>
+            <p>Price: ${course.price}</p>
+            <p>Lecture Notes: {getFileName(course.lectureNotes)}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
-};
+}
+
+function getFileName(filePath) {
+  // Extract file name from file path
+  return filePath.split("/").pop();
+}
 
 export default CourseList;
