@@ -30,6 +30,9 @@ app.use("/api/v1/profile", profileRoutes);
 const courseRoutes = require("./routes/courseRoutes");
 app.use("/api/v1/course", courseRoutes);
 
+const VideoRoutes = require("./routes/lectureVideosRoutes");
+app.use("/api/v1/video", VideoRoutes);
+
 // Endpoint to save image URL to user's profile
 app.post("/api/saveImage", async (req, res) => {
   try {
