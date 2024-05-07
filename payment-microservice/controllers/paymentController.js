@@ -1,34 +1,36 @@
 const Payment = require("../models/paymentModel");
-const stripe = require("stripe")("your_stripe_secret_key");
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 // Add Payment
 const addPayment = async (req, res) => {
   console.log("add payment");
-  const {cardNumber, expMonth, expYear, cvc, amount, currency} = req.body;
+  const {amount, currency, products} = req.body;
 
   try {
-    // Use Stripe to process payment
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: currency,
-      payment_method_data: {
-        type: "card",
-        card: {
-          number: cardNumber,
-          exp_month: expMonth,
-          exp_year: expYear,
-          cvc: cvc,
+    // Create a new Checkout Session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: products.map((product) => ({
+        price_data: {
+          currency,
+          product_data: {
+            name: product.name,
+          },
+          unit_amount: product.price * 100, // amount in cents
         },
-      },
+        quantity: product.quantity,
+      })),
+      mode: "payment",
+      success_url: "https://yourwebsite.com/success",
+      cancel_url: "https://yourwebsite.com/cancel",
     });
 
-    // Payment success
-    res.status(200).json({message: "Payment successful", paymentIntent});
+    res.json({sessionId: session.id});
   } catch (error) {
-    console.error("Error processing payment:", error);
+    console.error("Error creating checkout session:", error);
     res
       .status(500)
-      .json({error: "An error occurred while processing your payment"});
+      .json({error: "An error occurred while creating checkout session"});
   }
 };
 
