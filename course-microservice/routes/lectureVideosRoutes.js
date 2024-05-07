@@ -41,4 +41,21 @@ router.post("/add", upload.single("lectureVideos"), async (req, res) => {
   }
 });
 
+// Serve static files (videos) from the 'Videos' directory
+router.use("/videos", express.static(path.join(__dirname, "../Videos")));
+
+// GET route to retrieve uploaded videos
+router.get("/list", async (req, res) => {
+  try {
+    // Fetch all lecture videos from the database
+    const lectureVideos = await LectureVideos.find();
+
+    // Send the list of lecture videos to the frontend
+    res.status(200).send(lectureVideos);
+  } catch (error) {
+    console.error("Error fetching lecture videos:", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
