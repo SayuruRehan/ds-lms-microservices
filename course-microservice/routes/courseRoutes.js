@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({storage: storage});
 
 // Serve files stored in the respective folders
 router.use(
@@ -31,7 +31,7 @@ router.use("/lectureVideos", express.static(path.join(__dirname, "../Videos")));
 
 router.post(
   "/add",
-  upload.fields([{ name: "lectureNotes" }, { name: "lectureVideos" }]),
+  upload.fields([{name: "lectureNotes"}, {name: "lectureVideos"}]),
   async (req, res) => {
     try {
       const courseData = req.body;
@@ -40,29 +40,16 @@ router.post(
 
       // Process lecture notes
       if (lectureNotes && lectureNotes.length > 0) {
-        courseData.lectureNotes = lectureNotes.map((file) => file.path);
+        courseData.lectureNotes = lectureNotes
+          .map((file) => file.path)
+          .join(",");
       }
 
       // Process lecture videos
       if (lectureVideos && lectureVideos.length > 0) {
-        courseData.lectureVideos = lectureVideos.map((file) => file.path);
-
-        // Save lecture videos to LectureVideos model
-        const lectureVideoPromises = lectureVideos.map(async (video) => {
-          try {
-            const lectureVideo = new LectureVideos({
-              courseName: req.body.courseName,
-              lectureVideos: video.path,
-            });
-
-            console.log(lectureVideo);
-            await lectureVideo.save();
-          } catch (error) {
-            console.error("Error saving lecture video:", error);
-          }
-        });
-
-        await Promise.all(lectureVideoPromises);
+        courseData.lectureVideos = lectureVideos
+          .map((file) => file.path)
+          .join(",");
       }
 
       const course = new Course(courseData);
@@ -71,7 +58,7 @@ router.post(
       res.status(201).send(course);
     } catch (error) {
       console.error("Error uploading data:", error);
-      res.status(500).send({ error: "Error uploading data" });
+      res.status(500).send({error: "Error uploading data"});
     }
   }
 );
@@ -82,7 +69,7 @@ router.get("/get", async (req, res) => {
     const courses = await Course.find();
     res.status(200).send(courses);
   } catch (error) {
-    res.status(500).send({ error: "Error fetching courses" });
+    res.status(500).send({error: "Error fetching courses"});
   }
 });
 
@@ -96,14 +83,14 @@ router.get("/get/:courseId", async (req, res) => {
 
     // Check if the course exists
     if (!course) {
-      return res.status(404).send({ error: "Course not found" });
+      return res.status(404).send({error: "Course not found"});
     }
 
     // If the course exists, send it as a response
     res.status(200).send(course);
   } catch (error) {
     // If there's an error, send an error response
-    res.status(500).send({ error: "Error fetching course" });
+    res.status(500).send({error: "Error fetching course"});
   }
 });
 
@@ -120,15 +107,13 @@ router.put("/update/:courseId/:instructorId", async (req, res) => {
     });
 
     if (!course) {
-      return res
-        .status(404)
-        .send({ error: "Course not found or unauthorized" });
+      return res.status(404).send({error: "Course not found or unauthorized"});
     }
 
     // Update course details
-    await Course.findByIdAndUpdate(courseId, req.body, { new: true });
+    await Course.findByIdAndUpdate(courseId, req.body, {new: true});
 
-    res.status(200).send({ message: "Course updated successfully" });
+    res.status(200).send({message: "Course updated successfully"});
   } catch (error) {
     res.status(400).send(error);
   }
