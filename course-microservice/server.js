@@ -13,6 +13,9 @@ connectDB();
 // Initialize Express app
 const app = express();
 app.use(cors());
+app.use("/Lectures", express.static("Lectures"));
+app.use("/Videos", express.static("Videos"));
+
 
 // Middlewares
 app.use(express.json());
