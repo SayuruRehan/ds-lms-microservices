@@ -5,10 +5,10 @@ const Learner = require("../models/learnerSchema");
 // --------------------- Update lesson completion status -------------------------------
 router.post("/lesson/complete", async (req, res) => {
   try {
-    const { learnerId, courseId, lessonId } = req.body;
+    const { learnerId, courseId, lessonId, totalLessons } = req.body;
 
     // Find the learner
-    const learner = await Learner.findOne({learnerId});
+    const learner = await Learner.findOne({ learnerId });
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
@@ -34,23 +34,32 @@ router.post("/lesson/complete", async (req, res) => {
     }
 
     // Add lesson to completed lessons
-    enrolledCourse.lessonsCompleted.push({ lessonId, completed: true });
+    enrolledCourse.lessonsCompleted.push({ lessonId });
     await learner.save();
 
-    res.status(200).json({ message: "Lesson completed successfully" });
+    // Update progress of the course
+    const completedLessons = enrolledCourse.lessonsCompleted.length;
+    const progress = (completedLessons / totalLessons) * 100;
+    enrolledCourse.progress = progress;
+    await learner.save();
+
+    res
+      .status(200)
+      .json({ message: "Lesson completed successfully", progress: progress });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// Retrieve progress for a specific course
-router.get("/course/:learnerId/:courseId", async (req, res) => {
+//--------------------- Progress of a specific course -------------------------------
+router.get("/:learnerId/:courseId", async (req, res) => {
   try {
     const { learnerId, courseId } = req.params;
+    const { totalLessons } = req.body;
 
     // Find the learner
-    const learner = await Learner.findById(learnerId);
+    const learner = await Learner.findOne({ learnerId });
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
@@ -67,12 +76,16 @@ router.get("/course/:learnerId/:courseId", async (req, res) => {
         .json({ error: "Course not found or not enrolled" });
     }
 
+    // ---------------------------------
     // Calculate progress
-    const totalLessons = enrolledCourse.lessonsCompleted.length;
-    const completedLessons = enrolledCourse.lessonsCompleted.filter(
-      (lesson) => lesson.completed
-    ).length;
+    const completedLessons = enrolledCourse.lessonsCompleted.length;
     const progress = (completedLessons / totalLessons) * 100;
+
+    // Update enrolledCourse.progress
+    enrolledCourse.progress = progress;
+    // ----------------------------------
+    //const progress = enrolledCourse.progress
+    await learner.save();
 
     res.status(200).json({ courseId, progress });
   } catch (err) {
@@ -81,13 +94,14 @@ router.get("/course/:learnerId/:courseId", async (req, res) => {
   }
 });
 
-// Retrieve progress for all courses enrolled by a learner
-router.get("/course/progress/:learnerId", async (req, res) => {
+// --------------- Retrieve progress for all courses enrolled by a learner --------------------------
+router.get("/:learnerId", async (req, res) => {
   try {
     const { learnerId } = req.params;
+    const totalLessons = req.body;
 
     // Find the learner
-    const learner = await Learner.findById(learnerId);
+    const learner = await Learner.findOne({ learnerId });
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
@@ -95,11 +109,14 @@ router.get("/course/progress/:learnerId", async (req, res) => {
 
     // Calculate progress for each enrolled course
     const courseProgress = learner.enrolledCourses.map((course) => {
-      const totalLessons = course.lessonsCompleted.length;
-      const completedLessons = course.lessonsCompleted.filter(
-        (lesson) => lesson.completed
-      ).length;
-      const progress = (completedLessons / totalLessons) * 100;
+      //   const totalLessons = course.lessonsCompleted.length;
+      //   const completedLessons = course.lessonsCompleted.filter(
+      //     (lesson) => lesson.completed
+      //   ).length;
+
+      //   const completedLessons = course.lessonsCompleted.length;
+      //   const progress = (completedLessons / totalLessons) * 100;
+      const progress = course.progress;
       return { courseId: course.courseId, progress };
     });
 
