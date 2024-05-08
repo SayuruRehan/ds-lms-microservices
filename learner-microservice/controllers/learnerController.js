@@ -71,4 +71,25 @@ router.post("/course/unenroll", async (req, res) => {
   }
 });
 
+// ----------------------- Get All enrollments for a specific learner -----------------------------
+router.get("/enrollments/:learnerId", async (req, res) => {
+  try {
+    const { learnerId } = req.params;
+
+    // Check if the learner exists
+    const learner = await Learner.findById(learnerId);
+
+    if (!learner) {
+      return res.status(404).json({ error: "Learner not found" });
+    }
+
+    res.status(200).json({ enrolledCourses: learner.enrolledCourses });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
 module.exports = router;
