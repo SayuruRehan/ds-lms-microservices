@@ -59,7 +59,8 @@ router.post(
           .map((file) => file.path)
           .join(",");
       }
-      //Process Thumbnail
+
+      // Process Thumbnail
       if (preview && preview.length > 0) {
         courseData.preview = preview.map((file) => file.path).join(",");
       }
@@ -67,6 +68,10 @@ router.post(
       // Add lessons data
       const lessons = JSON.parse(courseData.lessons);
       courseData.lessons = lessons;
+
+      // Calculate the number of lessons
+      const totalLessons = lessons.length;
+      courseData.totalLessons = totalLessons;
 
       const course = new Course(courseData);
       await course.save();
@@ -132,7 +137,6 @@ router.put("/update/:courseId", async (req, res) => {
   }
 });
 
-
 // Route to delete a course by its ID
 router.delete("/delete/:courseId", async (req, res) => {
   try {
@@ -147,7 +151,9 @@ router.delete("/delete/:courseId", async (req, res) => {
     }
 
     // If the course was deleted successfully, send a success message
-    res.status(200).send({ message: "Course deleted successfully", deletedCourse });
+    res
+      .status(200)
+      .send({ message: "Course deleted successfully", deletedCourse });
   } catch (error) {
     // If there's an error, send an error response
     res.status(500).send({ error: "Error deleting course" });

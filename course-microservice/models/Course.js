@@ -58,6 +58,12 @@ const courseSchema = new mongoose.Schema({
       },
     },
   ],
+  totalLessons: {
+    type: Number,
+    default: function () {
+      return this.lessons.length;
+    },
+  },
 });
 
 const Course = mongoose.model("Course", courseSchema);
