@@ -131,4 +131,29 @@ router.put("/update/:courseId", async (req, res) => {
     res.status(500).send({ error: "Error updating course" });
   }
 });
+
+
+// Route to delete a course by its ID
+router.delete("/delete/:courseId", async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+
+    // Find the course by its ID and delete it
+    const deletedCourse = await Course.findByIdAndDelete(courseId);
+
+    // Check if the course was found and deleted
+    if (!deletedCourse) {
+      return res.status(404).send({ error: "Course not found" });
+    }
+
+    // If the course was deleted successfully, send a success message
+    res.status(200).send({ message: "Course deleted successfully", deletedCourse });
+  } catch (error) {
+    // If there's an error, send an error response
+    res.status(500).send({ error: "Error deleting course" });
+  }
+});
+
+module.exports = router;
+
 module.exports = router;
