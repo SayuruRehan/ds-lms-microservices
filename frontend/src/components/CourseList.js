@@ -60,6 +60,16 @@ function CourseList() {
               </ul>
             </div>
             <div className="bg-gray-100 px-6 py-4">
+              {course.preview && (
+                <img
+                  src={`http://localhost:4003/${course.preview.replace(
+                    "\\",
+                    "/"
+                  )}`}
+                  alt="Preview"
+                  className="w-full mb-2 rounded-md"
+                />
+              )}
               <p className="mb-2">
                 Lecture Notes:{" "}
                 {course.lectureNotes && (
