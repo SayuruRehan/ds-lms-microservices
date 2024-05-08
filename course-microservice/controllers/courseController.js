@@ -1,4 +1,4 @@
-// controllers/courseController.js
+/* // controllers/courseController.js
 
 const express = require("express");
 const router = express.Router();
@@ -10,9 +10,9 @@ const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     if (file.fieldname === "lectureNotes") {
-      cb(null, "../Lectures"); 
+      cb(null, "../Lectures");
     } else if (file.fieldname === "lectureVideos") {
-      cb(null, "../Videos"); 
+      cb(null, "../Videos");
     } else if (file.fieldname === "preview") {
       cb(null, "../Preview");
     }
@@ -20,14 +20,27 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
     const fileName = path.basename(file.originalname, ext);
-    cb(null, `${fileName}-${Date.now()}${ext}`); 
+    cb(null, `${fileName}-${Date.now()}${ext}`);
   },
 });
 
 const upload = multer({ storage: storage });
 
+// Serve files stored in the respective folders
+router.use(
+  "/lectureNotes",
+  express.static(path.join(__dirname, "../Lectures"))
+);
+router.use("/lectureVideos", express.static(path.join(__dirname, "../Videos")));
+router.use("/preview", express.static(path.join(__dirname, "../Preview")));
+
 // Function to add a new course
 exports.addCourse = async (req, res) => {
+    upload.fields([
+        { name: "lectureNotes" },
+        { name: "lectureVideos" },
+        { name: "preview" },
+      ])
   try {
     const courseData = req.body;
     const lectureNotes = req.files["lectureNotes"];
@@ -144,3 +157,4 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).send({ error: "Error deleting course" });
   }
 };
+ */

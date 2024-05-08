@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function CourseList() {
+function AdminCourseView() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
@@ -24,6 +24,24 @@ function CourseList() {
 
   const handleViewDetails = (courseId) => {
     setExpandedCourseId(courseId === expandedCourseId ? null : courseId);
+  };
+
+  const handleApproveCourse = async (courseId) => {
+    try {
+      await axios.post(`http://localhost:4003/api/v1/course/approve/${courseId}`);
+      // Update the local state to reflect the status change
+      setCourses(prevCourses => prevCourses.map(course => {
+        if (course._id === courseId) {
+          return { ...course, status: "approved" };
+        }
+        return course;
+      }));
+      // Show alert message
+      alert("Course has been approved successfully.");
+    } catch (error) {
+      console.error("Error approving course:", error);
+      setError("Error approving course. Please try again later.");
+    }
   };
 
   if (error) {
@@ -114,12 +132,21 @@ function CourseList() {
             <div className="bg-gray-100 px-6 py-4">
               <button
                 onClick={() => handleViewDetails(course._id)}
-                className="text-blue-500 hover:underline"
+                className="text-blue-500 hover:underline mr-2"
               >
                 {expandedCourseId === course._id
                   ? "Hide Details"
                   : "View Details"}
               </button>
+              {/** Render approve button only if course is not approved */}
+              {!course.approved && (
+                <button
+                  onClick={() => handleApproveCourse(course._id)}
+                  className="text-green-500 hover:underline"
+                >
+                  Approve
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -128,4 +155,4 @@ function CourseList() {
   );
 }
 
-export default CourseList;
+export default AdminCourseView;
