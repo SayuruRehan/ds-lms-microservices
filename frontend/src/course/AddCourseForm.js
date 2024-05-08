@@ -13,12 +13,10 @@ const AddCourseForm = () => {
     InstructorId: "",
     lectureVideos: null,
     preview: null,
-    lessons: [
-      { title: "", description: "" },
-      { title: "", description: "" },
-      { title: "", description: "" },
-    ],
+    lessons: [],
   });
+
+  const [numLessons, setNumLessons] = useState(0);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +28,38 @@ const AddCourseForm = () => {
     setCourseData({ ...courseData, [e.target.name]: file });
   };
 
-  const handleLessonChange = (index, e) => {
-    const { name, value } = e.target;
+  const handleLessonTitleChange = (index, e) => {
     const updatedLessons = [...courseData.lessons];
-    updatedLessons[index][name] = value;
+    updatedLessons[index].title = e.target.value;
     setCourseData({ ...courseData, lessons: updatedLessons });
+  };
+
+  const handleLessonDescriptionChange = (index, e) => {
+    const updatedLessons = [...courseData.lessons];
+    updatedLessons[index].description = e.target.value;
+    setCourseData({ ...courseData, lessons: updatedLessons });
+  };
+
+  const handleNumLessonsChange = (e) => {
+    const num = parseInt(e.target.value);
+    if (!isNaN(num) && num >= 0) {
+      setNumLessons(num);
+      if (num === 0) {
+        setCourseData({
+          ...courseData,
+          lessons: [],
+        });
+      } else {
+        const newLessons = Array.from({ length: num }, () => ({
+          title: "",
+          description: "",
+        }));
+        setCourseData({
+          ...courseData,
+          lessons: newLessons,
+        });
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,11 +74,15 @@ const AddCourseForm = () => {
         }
       });
 
+      console.log("FormData:", formData);
+
       await axios.post("http://localhost:4003/api/v1/course/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      console.log("Course added successfully!");
 
       setCourseData({
         title: "",
@@ -66,12 +95,9 @@ const AddCourseForm = () => {
         InstructorId: "",
         lectureVideos: null,
         preview: null,
-        lessons: [
-          { title: "", description: "" },
-          { title: "", description: "" },
-          { title: "", description: "" },
-        ],
+        lessons: [],
       });
+      setNumLessons(0);
 
       alert("Course added successfully!");
     } catch (error) {
@@ -167,26 +193,33 @@ const AddCourseForm = () => {
           required
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
+        <input
+          type="number"
+          name="numLessons"
+          value={numLessons}
+          onChange={handleNumLessonsChange}
+          required
+          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+          placeholder="Number of Lessons"
+        />
         <h3 className="text-xl font-semibold mb-2">Lessons</h3>
         {courseData.lessons.map((lesson, index) => (
           <div key={index}>
             <h4 className="text-lg font-semibold">Lesson {index + 1}</h4>
             <input
               type="text"
-              name="title"
               value={lesson.title}
-              onChange={(e) => handleLessonChange(index, e)}
+              onChange={(e) => handleLessonTitleChange(index, e)}
               required
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              placeholder="Lesson Title"
+              placeholder={`Lesson ${index + 1} Title`}
             />
             <textarea
-              name="description"
               value={lesson.description}
-              onChange={(e) => handleLessonChange(index, e)}
+              onChange={(e) => handleLessonDescriptionChange(index, e)}
               required
               className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              placeholder="Lesson Description"
+              placeholder={`Lesson ${index + 1} Description`}
             />
           </div>
         ))}
