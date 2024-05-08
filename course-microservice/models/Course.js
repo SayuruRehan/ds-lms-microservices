@@ -46,8 +46,20 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  lessons: [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
-const Course = mongoose.model("course", courseSchema);
+const Course = mongoose.model("Course", courseSchema);
 
 module.exports = Course;
