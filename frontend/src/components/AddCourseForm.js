@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios"; // You may need to install axios: npm install axios
+import axios from "axios";
 
 const AddCourseForm = () => {
   const [courseData, setCourseData] = useState({
@@ -10,7 +10,7 @@ const AddCourseForm = () => {
     level: "",
     price: 0,
     lectureNotes: null,
-    InstructorId: "", // Add InstructorId field
+    InstructorId: "",
     lectureVideos: null,
     preview: null,
     lessons: [
@@ -41,38 +41,39 @@ const AddCourseForm = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-      formData.append("title", courseData.title);
-      formData.append("instructor", courseData.instructor);
-      formData.append("description", courseData.description);
-      formData.append("duration", courseData.duration);
-      formData.append("level", courseData.level);
-      formData.append("price", courseData.price);
-      formData.append("lectureNotes", courseData.lectureNotes);
-
-      // Append three lessons
-      courseData.lessons.forEach((lesson, index) => {
-        formData.append(`lessons[${index}][title]`, lesson.title);
-        formData.append(`lessons[${index}][description]`, lesson.description);
+      Object.keys(courseData).forEach((key) => {
+        if (key === "lessons") {
+          formData.append(key, JSON.stringify(courseData[key]));
+        } else {
+          formData.append(key, courseData[key]);
+        }
       });
-
-      // Append InstructorId
-      formData.append("InstructorId", courseData.InstructorId);
-
-      // Append lectureVideos and preview if available
-      if (courseData.lectureVideos) {
-        formData.append("lectureVideos", courseData.lectureVideos);
-      }
-      if (courseData.preview) {
-        formData.append("preview", courseData.preview);
-      }
 
       await axios.post("http://localhost:4003/api/v1/course/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      setCourseData({
+        title: "",
+        instructor: "",
+        description: "",
+        duration: "",
+        level: "",
+        price: 0,
+        lectureNotes: null,
+        InstructorId: "",
+        lectureVideos: null,
+        preview: null,
+        lessons: [
+          { title: "", description: "" },
+          { title: "", description: "" },
+          { title: "", description: "" },
+        ],
+      });
+
       alert("Course added successfully!");
-      // Optionally, you can redirect the user to another page or perform any other action here
     } catch (error) {
       console.error("Error adding course:", error);
       alert("An error occurred while adding the course. Please try again.");
@@ -83,7 +84,6 @@ const AddCourseForm = () => {
     <div className="max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-4">Add Course</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Input fields for course details */}
         <input
           type="text"
           name="title"
@@ -144,7 +144,6 @@ const AddCourseForm = () => {
           required
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-        {/* Additional fields */}
         <input
           type="text"
           name="InstructorId"
@@ -158,22 +157,23 @@ const AddCourseForm = () => {
           type="file"
           name="lectureVideos"
           onChange={handleFileChange}
+          required
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
         <input
           type="file"
           name="preview"
           onChange={handleFileChange}
+          required
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
         />
-        {/* Lessons */}
         <h3 className="text-xl font-semibold mb-2">Lessons</h3>
         {courseData.lessons.map((lesson, index) => (
           <div key={index}>
             <h4 className="text-lg font-semibold">Lesson {index + 1}</h4>
             <input
               type="text"
-              name={`lessonTitle${index}`}
+              name="title"
               value={lesson.title}
               onChange={(e) => handleLessonChange(index, e)}
               required
@@ -181,7 +181,7 @@ const AddCourseForm = () => {
               placeholder="Lesson Title"
             />
             <textarea
-              name={`lessonDescription${index}`}
+              name="description"
               value={lesson.description}
               onChange={(e) => handleLessonChange(index, e)}
               required
@@ -190,7 +190,6 @@ const AddCourseForm = () => {
             />
           </div>
         ))}
-        {/* Submit button */}
         <button
           type="submit"
           className="bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 transition duration-300"
