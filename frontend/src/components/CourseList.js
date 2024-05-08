@@ -4,6 +4,7 @@ import axios from "axios";
 function CourseList() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
+  const [expandedCourseId, setExpandedCourseId] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -21,6 +22,10 @@ function CourseList() {
     }
   };
 
+  const handleViewDetails = (courseId) => {
+    setExpandedCourseId(courseId === expandedCourseId ? null : courseId);
+  };
+
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
@@ -36,30 +41,8 @@ function CourseList() {
           >
             <div className="p-6">
               <h2 className="text-xl font-semibold mb-2">
-                Title: {course.title}
+              {course.CourseName}
               </h2>
-              <p className="mb-2">Instructor: {course.instructor}</p>
-              <p className="mb-2">Description: {course.description}</p>
-              <p className="mb-2">Duration: {course.duration}</p>
-              <p className="mb-2">Level: {course.level}</p>
-              <p className="mb-2">Price: ${course.price}</p>
-              <h3 className="text-lg font-semibold mb-2">Lessons:</h3>
-              <ul className="list-disc pl-6">
-                {course.lessons.map((lesson, lessonIndex) => (
-                  <li key={lessonIndex}>
-                    <div className="mb-2">
-                      <span className="font-semibold">Title:</span>{" "}
-                      {lesson.title}
-                    </div>
-                    <div className="mb-2">
-                      <span className="font-semibold">Description:</span>{" "}
-                      {lesson.description}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-gray-100 px-6 py-4">
               {course.preview && (
                 <img
                   src={`http://localhost:4003/${course.preview.replace(
@@ -67,57 +50,76 @@ function CourseList() {
                     "/"
                   )}`}
                   alt="Preview"
-                  className="w-full mb-2 rounded-md"
+                  className="w-full mb-2 rounded-md cursor-pointer"
+                  onClick={() => handleViewDetails(course._id)}
                 />
               )}
-              <p className="mb-2">
-                Lecture Notes:{" "}
-                {course.lectureNotes && (
-                  <a
-                    href={`http://localhost:4003/${course.lectureNotes.replace(
-                      "\\",
-                      "/"
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    View PDF
-                  </a>
-                )}
-              </p>
-              <p className="mb-2">
-                Lecture Videos:{" "}
-                {course.lectureVideos && (
-                  <a
-                    href={`http://localhost:4003/${course.lectureVideos.replace(
-                      "\\",
-                      "/"
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    View Video
-                  </a>
-                )}
-              </p>
-              <p className="mb-2">
-                Preview:{" "}
-                {course.preview && (
-                  <a
-                    href={`http://localhost:4003/${course.preview.replace(
-                      "\\",
-                      "/"
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    View Preview
-                  </a>
-                )}
-              </p>
+              {expandedCourseId === course._id && (
+                <div>
+                  <p className="mb-2">Instructor: {course.instructor}</p>
+                  <p className="mb-2">Description: {course.description}</p>
+                  <p className="mb-2">Duration: {course.duration}</p>
+                  <p className="mb-2">Level: {course.level}</p>
+                  <p className="mb-2">Price: ${course.price}</p>
+                  <h3 className="text-lg font-semibold mb-2">Lessons:</h3>
+                  <ul className="list-disc pl-6">
+                    {course.lessons.map((lesson, lessonIndex) => (
+                      <li key={lessonIndex}>
+                        <div className="mb-2">
+                          <span className="font-semibold">Title:</span>{" "}
+                          {lesson.title}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">Description:</span>{" "}
+                          {lesson.description}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mb-2">
+                    Lecture Notes:{" "}
+                    {course.lectureNotes && (
+                      <a
+                        href={`http://localhost:4003/${course.lectureNotes.replace(
+                          "\\",
+                          "/"
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        View PDF
+                      </a>
+                    )}
+                  </p>
+                  <p className="mb-2">
+                    Lecture Videos:{" "}
+                    {course.lectureVideos && (
+                      <a
+                        href={`http://localhost:4003/${course.lectureVideos.replace(
+                          "\\",
+                          "/"
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        View Video
+                      </a>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="bg-gray-100 px-6 py-4">
+              <button
+                onClick={() => handleViewDetails(course._id)}
+                className="text-blue-500 hover:underline"
+              >
+                {expandedCourseId === course._id
+                  ? "Hide Details"
+                  : "View Details"}
+              </button>
             </div>
           </div>
         ))}
