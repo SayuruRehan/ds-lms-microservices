@@ -110,31 +110,25 @@ router.get("/get/:courseId", async (req, res) => {
   }
 });
 
-// Route to update a course by course ID and instructor ID
-router.put("/update/:courseId/:instructorId", async (req, res) => {
+// Route to update a course by its ID
+router.put("/update/:courseId", async (req, res) => {
   try {
     const courseId = req.params.courseId;
-    const instructorId = req.params.instructorId;
 
-    // Check if the course exists and has the same instructor ID
-    const course = await Course.findOne({
-      _id: courseId,
-      InstructorId: instructorId,
+    // Find the course by its ID
+    const course = await Course.findByIdAndUpdate(courseId, req.body, {
+      new: true,
     });
 
+    // Check if the course exists
     if (!course) {
-      return res
-        .status(404)
-        .send({ error: "Course not found or unauthorized" });
+      return res.status(404).send({ error: "Course not found" });
     }
 
-    // Update course details
-    await Course.findByIdAndUpdate(courseId, req.body, { new: true });
-
-    res.status(200).send({ message: "Course updated successfully" });
+    // If the course exists, send it as a response
+    res.status(200).send({ message: "Course updated successfully", course });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(500).send({ error: "Error updating course" });
   }
 });
-
 module.exports = router;
