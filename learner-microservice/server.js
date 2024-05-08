@@ -10,10 +10,12 @@ app.use(cors());
 
 const dbconfig = require("./config/DBConnect");
 const learnerController = require("./controllers/learnerController");
+const progressController = require("./controllers/progressController");
 
 app.use(express.json());
 
 app.use("/learner", learnerController);
+app.use("/progress", progressController);
 
 const port = process.env.LEARNER_PORT;
 

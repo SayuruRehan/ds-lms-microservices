@@ -6,30 +6,36 @@ const learnerSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  // learnerId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true,
+  //   unique: true,
+  // },
   enrolledCourses: [
     {
-      type: String,
+      courseId: {
+        type: String,
+        required: true,
+      },
+      progress: {
+        type: Number,
+        default: 0, // percentage completion
+      },
+      lessonsCompleted: [
+        {
+          lessonId: {
+            type: String,
+            required: true,
+          },
+          completed: {
+            type: Boolean,
+            default: false,
+          },
+        },
+      ],
     },
   ],
-  completedCourses: [
-    {
-      type: String,
-    },
-  ],
-  bio: {
-    type: String,
-    default: "",
-  },
-  profilePicture: {
-    type: String,
-    default: "default_profile.jpg",
-  },
-  dateOfBirth: {
-    type: Date,
-  },
-  contactNumber: {
-    type: String,
-  },
   createdAt: {
     type: Date,
     default: Date.now,

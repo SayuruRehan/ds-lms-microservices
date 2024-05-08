@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Learner = require("../models/learnerSchema");
 
-// ---------------------------- Enroll -------------------------------------
+//---------------------------- Enroll -------------------------------------
 router.post("/course/enroll", async (req, res) => {
   try {
     const { learnerId } = req.body;
@@ -12,22 +12,25 @@ router.post("/course/enroll", async (req, res) => {
       return res.status(400).json({ error: "Course ID is required" });
     }
 
-    // Check if the exist
-    const learner = await Learner.findById(learnerId);
+    // Find the learner by learnerId
+    const learner = await Learner.findOne({ learnerId }); // Change findById to findOne
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
     }
 
     // Check if the learner is already enrolled in the course
-    if (learner.enrolledCourses.includes(courseId)) {
+    const isEnrolled = learner.enrolledCourses.some(
+      (course) => course.courseId === courseId
+    );
+    if (isEnrolled) {
       return res
         .status(400)
         .json({ error: "Learner is already enrolled in this course" });
     }
 
     // Add the course to the learner's enrolledCourses array
-    learner.enrolledCourses.push(courseId);
+    learner.enrolledCourses.push({ courseId });
     await learner.save();
 
     res.status(200).json({ message: "Student enrolled successfully" });
@@ -37,13 +40,14 @@ router.post("/course/enroll", async (req, res) => {
   }
 });
 
+
 // --------------------------- Unenroll -------------------------------------
 router.post("/course/unenroll", async (req, res) => {
   try {
     const { learnerId, courseId } = req.body;
 
     // Check if the learner exists
-    const learner = await Learner.findById(learnerId);
+    const learner = await Learner.findOne({ learnerId });
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
@@ -77,7 +81,7 @@ router.get("/enrollments/:learnerId", async (req, res) => {
     const { learnerId } = req.params;
 
     // Check if the learner exists
-    const learner = await Learner.findById(learnerId);
+    const learner = await Learner.findOne({ learnerId });
 
     if (!learner) {
       return res.status(404).json({ error: "Learner not found" });
@@ -89,7 +93,5 @@ router.get("/enrollments/:learnerId", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-
 
 module.exports = router;
