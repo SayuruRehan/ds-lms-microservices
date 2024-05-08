@@ -59,20 +59,13 @@ router.post(
           .map((file) => file.path)
           .join(",");
       }
-
-      // Process Thumbnail
+      //Process Thumbnail
       if (preview && preview.length > 0) {
         courseData.preview = preview.map((file) => file.path).join(",");
       }
 
-      // Extract lessons from request body
-      const { lessons } = req.body;
-
-      // Check if lessons are provided
-      if (!lessons || !Array.isArray(lessons) || lessons.length !== 3) {
-        return res.status(400).send({ error: "Please provide 3 lessons" });
-      }
-
+      // Add lessons data
+      const lessons = JSON.parse(courseData.lessons);
       courseData.lessons = lessons;
 
       const course = new Course(courseData);
