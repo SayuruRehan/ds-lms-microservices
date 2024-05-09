@@ -3,7 +3,7 @@ import axios from "axios";
 
 const AddCourseForm = () => {
   const [courseData, setCourseData] = useState({
-    title: "",
+    CourseName: "",
     instructor: "",
     description: "",
     duration: "",
@@ -25,6 +25,7 @@ const AddCourseForm = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    console.log("File selected:", file);
     setCourseData({ ...courseData, [e.target.name]: file });
   };
 
@@ -85,7 +86,7 @@ const AddCourseForm = () => {
       console.log("Course added successfully!");
 
       setCourseData({
-        title: "",
+        CourseName: "",
         instructor: "",
         description: "",
         duration: "",
@@ -112,8 +113,8 @@ const AddCourseForm = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          name="title"
-          value={courseData.title}
+          name="CourseName"
+          value={courseData.CourseName}
           onChange={handleChange}
           required
           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
