@@ -5,6 +5,9 @@ function AdminCourseView() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [courseToApprove, setCourseToApprove] = useState(null);
+  const [courseToReject, setCourseToReject] = useState(null);
 
   useEffect(() => {
     fetchCourses();
@@ -27,20 +30,54 @@ function AdminCourseView() {
   };
 
   const handleApproveCourse = async (courseId) => {
+    setShowConfirmationModal(true);
+    setCourseToApprove(courseId);
+  };
+
+  const handleRejectCourse = async (courseId) => {
+    setShowConfirmationModal(true);
+    setCourseToReject(courseId);
+  };
+
+  const confirmApproveCourse = async () => {
     try {
-      await axios.post(`http://localhost:4003/api/v1/course/approve/${courseId}`);
-      // Update the local state to reflect the status change
-      setCourses(prevCourses => prevCourses.map(course => {
-        if (course._id === courseId) {
-          return { ...course, status: "approved" };
-        }
-        return course;
-      }));
-      // Show alert message
+      await axios.post(
+        `http://localhost:4003/api/v1/course/approve/${courseToApprove}`
+      );
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => {
+          if (course._id === courseToApprove) {
+            return { ...course, status: "approved" };
+          }
+          return course;
+        })
+      );
       alert("Course has been approved successfully.");
+      setShowConfirmationModal(false);
     } catch (error) {
       console.error("Error approving course:", error);
       setError("Error approving course. Please try again later.");
+    }
+  };
+
+  const confirmRejectCourse = async () => {
+    try {
+      await axios.post(
+        `http://localhost:4003/api/v1/course/reject/${courseToReject}`
+      );
+      setCourses((prevCourses) =>
+        prevCourses.map((course) => {
+          if (course._id === courseToReject) {
+            return { ...course, status: "rejected" };
+          }
+          return course;
+        })
+      );
+      alert("Course has been rejected.");
+      setShowConfirmationModal(false);
+    } catch (error) {
+      console.error("Error rejecting course:", error);
+      setError("Error rejecting course. Please try again later.");
     }
   };
 
@@ -73,60 +110,7 @@ function AdminCourseView() {
                 />
               )}
               {expandedCourseId === course._id && (
-                <div>
-                  <p className="mb-2">Instructor: {course.instructor}</p>
-                  <p className="mb-2">Description: {course.description}</p>
-                  <p className="mb-2">Duration: {course.duration}</p>
-                  <p className="mb-2">Level: {course.level}</p>
-                  <p className="mb-2">Price: ${course.price}</p>
-                  <h3 className="text-lg font-semibold mb-2">Lessons:</h3>
-                  <ul className="list-disc pl-6">
-                    {course.lessons.map((lesson, lessonIndex) => (
-                      <li key={lessonIndex}>
-                        <div className="mb-2">
-                          <span className="font-semibold">Title:</span>{" "}
-                          {lesson.title}
-                        </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">Description:</span>{" "}
-                          {lesson.description}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mb-2">
-                    Lecture Notes:{" "}
-                    {course.lectureNotes && (
-                      <a
-                        href={`http://localhost:4003/${course.lectureNotes.replace(
-                          "\\",
-                          "/"
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
-                      >
-                        View PDF
-                      </a>
-                    )}
-                  </p>
-                  <p className="mb-2">
-                    Lecture Videos:{" "}
-                    {course.lectureVideos && (
-                      <a
-                        href={`http://localhost:4003/${course.lectureVideos.replace(
-                          "\\",
-                          "/"
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
-                      >
-                        View Video
-                      </a>
-                    )}
-                  </p>
-                </div>
+                <div>{/* Details about the course */}</div>
               )}
             </div>
             <div className="bg-gray-100 px-6 py-4">
@@ -138,19 +122,54 @@ function AdminCourseView() {
                   ? "Hide Details"
                   : "View Details"}
               </button>
-              {/** Render approve button only if course is not approved */}
               {!course.approved && (
-                <button
-                  onClick={() => handleApproveCourse(course._id)}
-                  className="text-green-500 hover:underline"
-                >
-                  Approve
-                </button>
+                <>
+                  <button
+                    onClick={() => handleApproveCourse(course._id)}
+                    className="text-green-500 hover:underline"
+                  >
+                    {course.status === "approved" ? "Approved" : "Approve"}
+                  </button>
+                  <button
+                    onClick={() => handleRejectCourse(course._id)}
+                    className="text-red-500 hover:underline ml-2"
+                  >
+                    {course.status === "rejected" ? "Rejected" : "Reject"}
+                  </button>
+                </>
               )}
             </div>
           </div>
         ))}
       </div>
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-md">
+            <p>
+              {courseToApprove
+                ? "Are you sure you want to approve this course?"
+                : "Are you sure you want to reject this course?"}
+            </p>
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={
+                  courseToApprove ? confirmApproveCourse : confirmRejectCourse
+                }
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+              >
+                {courseToApprove ? "Approve" : "Reject"}
+              </button>
+              <button
+                onClick={() => setShowConfirmationModal(false)}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

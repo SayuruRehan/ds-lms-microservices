@@ -161,6 +161,31 @@ router.post("/approve/:courseId", async (req, res) => {
   }
 });
 
+// Route to reject a course by its ID
+router.post("/reject/:courseId", async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+
+    // Find the course by its ID and update its status to "rejected"
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      { status: "rejected" },
+      { new: true }
+    );
+
+    // Check if the course exists
+    if (!course) {
+      return res.status(404).send({ error: "Course not found" });
+    }
+
+    // If the course exists, send it as a response
+    res.status(200).send({ message: "Course rejected successfully", course });
+  } catch (error) {
+    // If there's an error, send an error response
+    res.status(500).send({ error: "Error rejecting course" });
+  }
+});
+
 // Route to delete a course by its ID
 router.delete("/delete/:courseId", async (req, res) => {
   try {
