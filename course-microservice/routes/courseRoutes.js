@@ -209,4 +209,34 @@ router.delete("/delete/:courseId", async (req, res) => {
   }
 });
 
+// Route to retrieve all approved courses
+router.get("/getApproved", async (req, res) => {
+  try {
+    const courses = await Course.find({ status: "approved" });
+    res.status(200).send(courses);
+  } catch (error) {
+    res.status(500).send({ error: "Error fetching approved courses" });
+  }
+});
+
+// Route to retrieve all rejected courses
+router.get("/getRejected", async (req, res) => {
+  try {
+    const courses = await Course.find({ status: "rejected" });
+    res.status(200).send(courses);
+  } catch (error) {
+    res.status(500).send({ error: "Error fetching rejected courses" });
+  }
+});
+
+// Route to retrieve pending courses
+router.get("/getPending", async (req, res) => {
+  try {
+    const pendingCourses = await Course.find({ status: "pending" });
+    res.status(200).send(pendingCourses);
+  } catch (error) {
+    res.status(500).send({ error: "Error fetching pending courses" });
+  }
+});
+
 module.exports = router;

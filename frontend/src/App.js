@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import AddCourseForm from "./course/AddCourseForm";
 import CourseList from "./course/CourseList";
 import AdminCourseView from "./course/AdminCourseView";
+import EditCourseForm from "./course/EditCourseForm";
 
 export default function App() {
   const heroData = [
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/addCourse" element={<AddCourseForm />} />
         <Route path="/list" element={<CourseList />} />
         <Route path="/adminList" element={<AdminCourseView />} />
+        <Route path="/edit/:courseId" element={<EditCourseForm />} />
       </Routes>
     </Router>
   );
