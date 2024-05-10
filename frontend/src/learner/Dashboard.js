@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SideNavBar from "./SideNavBar";
 import EnrolledCourses from "./EnrolledCourses";
 
 const Dashboard = () => {
@@ -12,7 +11,7 @@ const Dashboard = () => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <SideNavBar activeTab={activeTab} handleTabChange={handleTabChange} />
+      {/* <SideNavBar activeTab={activeTab} handleTabChange={handleTabChange} /> */}
       {/* Main Content */}
       <div className="flex-1">
         <div className="container px-4 mx-auto">
