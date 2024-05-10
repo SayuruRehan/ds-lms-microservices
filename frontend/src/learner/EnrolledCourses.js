@@ -31,18 +31,21 @@ const EnrolledCourses = () => {
         // });
 
         setCourses(combinedCourses);
-        
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
       }
     };
 
     fetchEnrolledCourses();
-    console.log(courses)
   }, []);
+
+  const handleContinueLearning = (course) => {
+    localStorage.setItem("courseData", JSON.stringify(course));
+  };
 
   return (
     <div className="container px-4 mx-auto">
+      {console.log(courses)}
       <h1 className="mb-4 text-3xl font-semibold">Enrolled Courses</h1>
       <div className="flex mb-4">
         <button className="px-3 py-1 mr-2 text-white bg-blue-500 rounded">
@@ -55,7 +58,7 @@ const EnrolledCourses = () => {
           Completed Courses
         </button>
       </div>
-      
+
       {/* Display enrolled courses */}
       <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {courses.map((course) => (
@@ -69,6 +72,7 @@ const EnrolledCourses = () => {
               alt={course.name}
             />
             <div className="px-6 py-4">
+              courseID {course.courseId}
               <h3 className="mb-2 text-lg font-semibold text-gray-900">
                 Course Name
                 {course.name}
@@ -86,11 +90,18 @@ const EnrolledCourses = () => {
                 ></div>
               </div>
               <p className="mb-2 text-gray-700">{course.progress}% Completed</p>
-              <Link
+              {/* <Link
                 to={{
                   pathname: `/courses/${course.courseId}`,
                   state: { course },
                 }}
+                className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+              >
+                Continue Learning
+              </Link> */}
+              <Link
+                to={`/courses/${course.courseId}`}
+                onClick={() => handleContinueLearning(course)}
                 className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               >
                 Continue Learning
