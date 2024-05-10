@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema({
-  title: {
+  InstructorId: {
+    type: String,
+    required: true,
+  },
+  CourseName: {
     type: String,
     required: true,
   },
@@ -26,11 +30,42 @@ const courseSchema = new mongoose.Schema({
     required: true,
   },
   lectureNotes: {
-    type: String, // Assuming lectureNotes is a file path
+    type: String,
     required: true,
-  }
+  },
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  lectureVideos: {
+    type: String,
+    required: true,
+  },
+  preview: {
+    type: String,
+    required: true,
+  },
+  lessons: [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  totalLessons: {
+    type: Number,
+    default: function () {
+      return this.lessons.length;
+    },
+  },
 });
 
-const Course = mongoose.model("course", courseSchema);
+const Course = mongoose.model("Course", courseSchema);
 
 module.exports = Course;

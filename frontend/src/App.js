@@ -3,17 +3,19 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Background/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 import Profile from "./pages/Profile";
-import AddCourseForm from "./components/AddCourseForm";
-import CourseList from "./components/CourseList";
-import UploadVideo from "./components/UploadVideo";
-import LectureVideos from "./components/LectureVideos";
+
 
 import FeatureDisplay from "./components/FeatureDisplay";
 import EnrolledCourses from "./learner/EnrolledCourses";
 import Dashboard from "./learner/Dashboard";
 import CoursePage from "./learner/CoursePage";
+
+import AddCourseForm from "./course/AddCourseForm";
+import CourseList from "./course/CourseList";
+import AdminCourseView from "./course/AdminCourseView";
+import EditCourseForm from "./course/EditCourseForm";
+
 
 export default function App() {
   const heroData = [
@@ -23,7 +25,6 @@ export default function App() {
   ];
 
   const [heroCount, setHeroCount] = useState(0);
-  const [playStatus, setPlayStatus] = useState(false);
 
   return (
     <Router>
@@ -32,21 +33,19 @@ export default function App() {
           path="/"
           element={
             <Home
-              playStatus={playStatus}
               heroCount={heroCount}
-              setPlayStatus={setPlayStatus}
-              heroData={heroData} // Pass heroData as a prop
+              heroData={heroData}
               setHeroCount={setHeroCount}
             />
           }
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         <Route path="/profile" element={<Profile />} />
-        <Route path="/features" element={<FeatureDisplay />} />
+
         <Route path="/addCourse" element={<AddCourseForm />} />
         <Route path="/list" element={<CourseList />} />
+
         <Route path="/video" element={<UploadVideo />} />
         <Route path="/vlist" element={<LectureVideos />} />
 
@@ -54,6 +53,10 @@ export default function App() {
         <Route path="/enrolledCourses" element={<EnrolledCourses />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/courses/:courseID" element={<CoursePage />} />
+
+
+        <Route path="/adminList" element={<AdminCourseView />} />
+        <Route path="/edit/:courseId" element={<EditCourseForm />} />
 
       </Routes>
     </Router>
