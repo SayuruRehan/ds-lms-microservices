@@ -1,6 +1,13 @@
-FROM node:18
-WORKDIR /
-COPY package*.json ./
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json .
+
 RUN npm install
-CMD ["nodemon", "server.js"]
+
+COPY . .
+
+CMD ["npm", "start"]
+
 EXPOSE 4002
