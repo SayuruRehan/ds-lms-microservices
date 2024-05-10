@@ -5,10 +5,17 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
+
+import FeatureDisplay from "./components/FeatureDisplay";
+import EnrolledCourses from "./learner/EnrolledCourses";
+import Dashboard from "./learner/Dashboard";
+import CoursePage from "./learner/CoursePage";
+
 import AddCourseForm from "./course/AddCourseForm";
 import CourseList from "./course/CourseList";
 import AdminCourseView from "./course/AdminCourseView";
 import EditCourseForm from "./course/EditCourseForm";
+
 
 export default function App() {
   const heroData = [
@@ -38,8 +45,19 @@ export default function App() {
 
         <Route path="/addCourse" element={<AddCourseForm />} />
         <Route path="/list" element={<CourseList />} />
+
+        <Route path="/video" element={<UploadVideo />} />
+        <Route path="/vlist" element={<LectureVideos />} />
+
+        {/* Learner Routes */}
+        <Route path="/enrolledCourses" element={<EnrolledCourses />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/courses/:courseID" element={<CoursePage />} />
+
+
         <Route path="/adminList" element={<AdminCourseView />} />
         <Route path="/edit/:courseId" element={<EditCourseForm />} />
+
       </Routes>
     </Router>
   );
