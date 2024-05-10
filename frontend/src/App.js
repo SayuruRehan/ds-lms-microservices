@@ -13,6 +13,7 @@ import LectureVideos from "./components/LectureVideos";
 import FeatureDisplay from "./components/FeatureDisplay";
 import EnrolledCourses from "./learner/EnrolledCourses";
 import Dashboard from "./learner/Dashboard";
+import CoursePage from "./learner/CoursePage";
 
 export default function App() {
   const heroData = [
@@ -52,6 +53,7 @@ export default function App() {
         {/* Learner Routes */}
         <Route path="/enrolledCourses" element={<EnrolledCourses />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/courses/:courseID" element={<CoursePage />} />
 
       </Routes>
     </Router>
