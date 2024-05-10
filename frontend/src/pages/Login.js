@@ -1,47 +1,12 @@
-import React, { useState } from "react";
-import { Form, Input, message, Radio } from "antd";
-import { useDispatch } from "react-redux";
-import { showLoading, hideLoading } from "../redux/features/alertSlice";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React from "react";
+import { Form, Input, message } from "antd";
+import { Link } from "react-router-dom";
 import loginImage from "../assets/bg.jpg";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [selectedRole, setSelectedRole] = useState(null);
-
   const onFinishHandler = async (values) => {
-    const { email, password } = values;
-    if (email === "Ann@gmail.com" && password === "ann123") {
-      navigate("/hello-teacher");
-      return;
-    }
-
-    try {
-      dispatch(showLoading());
-      const res = await axios.post("http://localhost:4003/api/v1/user/login", {
-        ...values,
-        role: selectedRole,
-      });
-      console.log("Login response:", res);
-      dispatch(hideLoading());
-
-      if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
-
-        localStorage.setItem("userId", res.data.userId); // Store userId in localStorage
-        localStorage.setItem("username", res.data.username);
-        message.success("Login Successfully");
-        navigate("/features");
-      } else {
-        message.error(res.data.message);
-      }
-    } catch (error) {
-      dispatch(hideLoading());
-      console.error(error);
-      message.error("Something went wrong");
-    }
+    console.log("Form values:", values);
+    // Your form submission logic goes here
   };
 
   return (
@@ -56,7 +21,6 @@ const Login = () => {
       <div className="max-w-screen-xl flex items-center justify-center mx-auto">
         {/* Form Section */}
         <div className="w-1/2 bg-white shadow-md rounded px-10 py-10 md:py-24 md:px-12 md:mr-4">
-          {/* Increased py-12 and mb-8 for more height */}
           <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-8 mt-0">
             Login Form
           </h2>
@@ -94,7 +58,6 @@ const Login = () => {
         </div>
         {/* Image Section */}
         <div className="w-1/2">
-          {/* Image section remains the same */}
           <img
             src={loginImage}
             alt="Login"
