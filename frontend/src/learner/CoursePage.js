@@ -27,12 +27,20 @@ const CoursePage = () => {
   //   const { course } = location.state;
 
   const course = JSON.parse(localStorage.getItem("courseData"));
-  
+
+  const handleLessonCompletion = (index) => {
+    // const updatedLessons = [...lessons];
+    // updatedLessons[index].completed = !updatedLessons[index].completed;
+    // setLessons(updatedLessons);
+  };
   return (
     <div className="container px-4 mx-auto">
-      <h1 className="mb-4 text-3xl font-semibold">{course.name}</h1>
-      <div className="flex">
-        <LessonsList lessons={course.lessonsCompleted} />
+      <h1 className="mb-4 text-3xl font-semibold">{course.CourseName}</h1>
+      <div className="flex flex-auto">
+        <LessonsList
+        //   lessons={lessons}
+          handleLessonCompletion={handleLessonCompletion}
+        />
         <Progress progress={course.progress} />
       </div>
     </div>
