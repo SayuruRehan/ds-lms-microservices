@@ -93,38 +93,6 @@ router.get("/enrollments/:learnerId", async (req, res) => {
   }
 });
 
-
-router.post("/enroll", async (req, res) => {
-  try {
-    const { learnerId, courseId } = req.body;
-
-    //Check if learner exists
-    const learner = await Learner.findOne({ learnerId });
-    if (!learner) {
-      return res.status(404).json({ error: "Learner not found" });
-    }
-
-    // Check if course is already enrolled
-    const isEnrolled = Learner.enrolledCourses.some(
-      (course) => course.courseId === courseId
-    );
-    if (isEnrolled) {
-      return res
-        .status(400)
-        .json({ error: "Learner already enrolled in this course" });
-    }
-
-    // Add course to enrolledCourses
-    learner.enrolledCourses.push({ courseId });
-    await learner.save();
-
-    res.json({ message: "Enrollment successful" });
-  } catch (error) {
-    console.error("Error enrolling learner:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
 //  ---------------------------- create a new learner ------------------------------
 router.post("/create", async (req, res) => {
   try {

@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 
 const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [activeTab, setActiveTab] = useState("Enrolled");
 
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
         const learnerId = "123f55396a149b001f8a1234";
         const courseId = "663e121fedbf471dcc4c30ff";
-
 
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
@@ -50,43 +51,78 @@ const EnrolledCourses = () => {
             status: courseDetails.status,
             preview: courseDetails.preview,
             lessons: courseDetails.lessons,
-            lessonsCompleted: course.lessonsCompleted
+            lessonsCompleted: course.lessonsCompleted,
           };
         });
-        
+
         setCourses(combinedCourses);
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
       }
     };
 
-    
     fetchEnrolledCourses();
-    
   }, []);
 
   const handleContinueLearning = (course) => {
     localStorage.setItem("courseData", JSON.stringify(course));
   };
 
+  const filterCourses = (tab) => {
+    if (tab === "enrolled") {
+      setFilteredCourses(courses);
+    } else if (tab === "active") {
+      setFilteredCourses(
+        courses.filter(
+          (course) => course.lessonsCompleted.length < course.totalLessons
+        )
+      );
+    } else if (tab === "completed") {
+      setFilteredCourses(
+        courses.filter(
+          (course) => course.lessonsCompleted.length === course.totalLessons
+        )
+      );
+    }
+  };
+
+  useEffect(() => {
+    filterCourses(activeTab);
+  }, [activeTab, courses]);
+
   return (
     <div className="container px-4 mx-auto">
       <h1 className="mb-4 text-3xl font-semibold">Enrolled Courses</h1>
       <div className="flex mb-4">
-        <button className="px-3 py-1 mr-2 text-white bg-blue-500 rounded">
+        <button
+           className={`px-3 py-1 mr-2 text-white bg-blue-500 rounded ${
+            activeTab === "enrolled" ? "bg-blue-700" : "hover:bg-blue-700"
+          }`}
+          onClick={() => setActiveTab("enrolled")}
+        >
           Enrolled Courses
         </button>
-        <button className="px-3 py-1 mr-2 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">
+        <button
+          className={`px-3 py-1 mr-2 text-white bg-gray-300 rounded ${
+            activeTab === "active" ? "bg-blue-500" : "hover:bg-gray-400"
+          }`}
+          onClick={() => setActiveTab("active")}
+        >
           Active Courses
         </button>
-        <button className="px-3 py-1 text-gray-700 bg-gray-300 rounded hover:bg-gray-400">
+        <button
+          className={`px-3 py-1 text-white bg-gray-300 rounded ${
+            activeTab === "completed" ? "bg-blue-500" : "hover:bg-gray-400"
+          }`}
+          onClick={() => setActiveTab("completed")}
+        >
           Completed Courses
         </button>
       </div>
 
       {/* Display enrolled courses */}
       <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {courses.map((course) => (
+        {filteredCourses.map((course) => (
           <div
             key={course.courseId}
             className="overflow-hidden bg-white rounded-lg shadow-lg"
@@ -114,15 +150,7 @@ const EnrolledCourses = () => {
                 ></div>
               </div>
               <p className="mb-2 text-gray-700">{course.progress}% Completed</p>
-              {/* <Link
-                to={{
-                  pathname: `/courses/${course.courseId}`,
-                  state: { course },
-                }}
-                className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-              >
-                Continue Learning
-              </Link> */}
+
               <Link
                 to={`/courses/${course._courseId}`}
                 onClick={() => handleContinueLearning(course)}

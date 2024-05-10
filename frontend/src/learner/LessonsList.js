@@ -22,7 +22,7 @@ const LessonsList = ({ lessons }) => {
   const handleLessonCompletion = (index) => {};
   console.log(lessons);
   return (
-    <div className="flex-1 pr-8">
+    <div className="flex-1 mr-4">
       <h2 className="mb-4 text-lg font-semibold">Chapters</h2>
       <div className="space-y-4">
         {lessons.map((lesson, index) => (
