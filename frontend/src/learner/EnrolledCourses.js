@@ -8,14 +8,19 @@ const EnrolledCourses = () => {
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
+        const learnerId = "614f55396a149b001f8a652f";
+        const courseId = "663e121fedbf471dcc4c30ff";
+        
         const response = await axios.get(
-          "http://localhost:4002/learner/enrollments/614f55396a149b001f8a652f"
+          `http://localhost:4002/learner/enrollments/${learnerId}`
         );
+        
         const enrolledCourses = response.data.enrolledCourses;
-        // const courseDetailsPromises = enrolledCourses.map(course => {
-        //     console.log("Waiting for course api response");
-        //   return axios.get(`http://localhost:4003/api/v1/course/get/:${course.courseId}`);
-
+        // const courseDetailsPromises = enrolledCourses.map((course) => {
+        //   console.log("Waiting for course api response");
+        //   return axios.get(
+        //     `http://localhost:4003/api/v1/course/get/${courseId}`
+        //   );
         // });
 
         //const courseDetailsResponses = await Promise.all(courseDetailsPromises);
@@ -24,9 +29,19 @@ const EnrolledCourses = () => {
         //   const courseDetails = courseDetailsResponses[index].data;
         //   return {
         //     ...course,
-        //     name: courseDetails.name,
-        //     thumbnail: courseDetails.thumbnail,
-        //     totalLessons: courseDetails.totalLessons
+        //     preview: courseDetails.preview,
+        //     totalLessons: courseDetails.totalLessons,
+        //     InstructorId: courseDetails.InstructorId,
+        //     CourseName: courseDetails.CourseName,
+        //     description: courseDetails.description,
+        //     duration: courseDetails.duration,
+        //     level: courseDetails.level,
+        //     price: courseDetails.price,
+        //     lectureNotes: courseDetails.lectureNotes,
+        //     status: courseDetails.lectureVideos,
+        //     status: courseDetails.status,
+        //     preview: courseDetails.preview,
+        //     lessons: courseDetails.lessons,
         //   };
         // });
 
@@ -45,7 +60,6 @@ const EnrolledCourses = () => {
 
   return (
     <div className="container px-4 mx-auto">
-      {console.log(courses)}
       <h1 className="mb-4 text-3xl font-semibold">Enrolled Courses</h1>
       <div className="flex mb-4">
         <button className="px-3 py-1 mr-2 text-white bg-blue-500 rounded">
@@ -68,17 +82,15 @@ const EnrolledCourses = () => {
           >
             <img
               className="object-cover object-center w-full h-40"
-              src={course.thumbnail}
-              alt={course.name}
+              src={course.preview}
+              alt={course.CourseName}
             />
             <div className="px-6 py-4">
-              courseID {course.courseId}
               <h3 className="mb-2 text-lg font-semibold text-gray-900">
-                Course Name
-                {course.name}
+                {course.CourseName}
               </h3>
               <p className="mb-2 text-gray-700">
-                Total Lessons: {course.totalLessons} Count
+                Total Lessons: {course.totalLessons}
               </p>
               <p className="mb-2 text-gray-700">
                 Completed Lessons: {course.lessonsCompleted.length}
