@@ -11,6 +11,8 @@ import UploadVideo from "./components/UploadVideo";
 import LectureVideos from "./components/LectureVideos";
 
 import FeatureDisplay from "./components/FeatureDisplay";
+import EnrolledCourses from "./learner/EnrolledCourses";
+import Dashboard from "./learner/Dashboard";
 
 export default function App() {
   const heroData = [
@@ -46,6 +48,11 @@ export default function App() {
         <Route path="/list" element={<CourseList />} />
         <Route path="/video" element={<UploadVideo />} />
         <Route path="/vlist" element={<LectureVideos />} />
+
+        {/* Learner Routes */}
+        <Route path="/enrolledCourses" element={<EnrolledCourses />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
       </Routes>
     </Router>
   );
