@@ -17,29 +17,27 @@
 
 // export default CoursePage;
 
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import LessonsList from "./LessonsList";
 import Progress from "./Progress";
 
 const CoursePage = () => {
-  //   const location = useLocation();
-  //   const { course } = location.state;
-
   const course = JSON.parse(localStorage.getItem("courseData"));
+  const [lessons, setLessons] = useState([]);
 
-  const handleLessonCompletion = (index) => {
-    // const updatedLessons = [...lessons];
-    // updatedLessons[index].completed = !updatedLessons[index].completed;
-    // setLessons(updatedLessons);
-  };
+//   const handleLessonCompletion = (index) => {
+//     const updatedLessons = [...course.lessons];
+//     updatedLessons[index].completed = !updatedLessons[index].completed;
+//     setLessons(updatedLessons);
+//   };
+
+
   return (
     <div className="container px-4 mx-auto">
       <h1 className="mb-4 text-3xl font-semibold">{course.CourseName}</h1>
       <div className="flex flex-auto">
         <LessonsList
-        //   lessons={lessons}
-          handleLessonCompletion={handleLessonCompletion}
+          lessons={course.lessons}
         />
         <Progress progress={course.progress} />
       </div>

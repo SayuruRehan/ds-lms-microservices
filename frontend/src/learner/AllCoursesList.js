@@ -37,15 +37,25 @@ function AllCourses() {
   };
 
   const handleEnroll = async (courseId) => {
-    const learnerId = "614f55396a149b001f8a652f";
+    console.log(courseId);
+    const learnerId = "567855396a149b001f8a1234";
     try {
-      const response = await axios.post("/course/enroll?courseId=" + courseId + "");
+      const response = await axios.post(
+        `http://localhost:4002/learner/course/enroll?courseId=${courseId}`,
+        { learnerId }
+      );
       console.log(response.data.message);
-      // Refresh courses after enrollment
-      fetchCourses();
+      // Redirect to Success.js after successful enrollment
+      if (response.status(200)) {
+        navigate("/enroll/success");
+      } else {
+        navigate("/enroll/unsuccess");
+      }
+
+      response.status(400).json({ message: "Student enrolled successfully" });
     } catch (error) {
-      console.error("Error enrolling student:", error);
-      setError("Error enrolling student. Please try again later.");
+      console.error("Error enrolling:", error);
+      // Handle error
     }
   };
 
@@ -184,17 +194,8 @@ function AllCourses() {
               )}
             </div>
             <div className="px-6 py-4 bg-gray-100">
-              {/* <button
-                onClick={() => handleViewDetails(course._id)}
-                className="text-blue-500 hover:underline"
-              >
-                {expandedCourseId === course._id
-                  ? "Hide Details"
-                  : "View Details"}
-              </button> */}
-              {/* <Link to="/all">Enroll Me</Link> */}
               <Link
-                to={`/enroll/${course._id}`}
+                to={`/course/enroll/${course._id}`}
                 onClick={() => handleEnroll(course._id)}
               >
                 Enroll Me

@@ -13,6 +13,8 @@ import CourseList from "./course/CourseList";
 import AdminCourseView from "./course/AdminCourseView";
 import EditCourseForm from "./course/EditCourseForm";
 import AllCourses from "./learner/AllCoursesList";
+import Success from "./learner/Success";
+import Unsuccess from "./learner/Unsuccess";
 
 export default function App() {
   const heroData = [
@@ -50,6 +52,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/courses/:courseID" element={<CoursePage />} />
         <Route path="/all" element={<AllCourses />} />
+        <Route path="/enroll/success" element={<Success />} />
+        <Route path="/enroll/unsuccess" element={<Unsuccess />} />
 
         <Route path="/adminList" element={<AdminCourseView />} />
         <Route path="/edit/:courseId" element={<EditCourseForm />} />

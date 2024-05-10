@@ -8,50 +8,61 @@ const EnrolledCourses = () => {
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
-        const learnerId = "614f55396a149b001f8a652f";
+        const learnerId = "123f55396a149b001f8a1234";
         const courseId = "663e121fedbf471dcc4c30ff";
-        
+
+
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
         );
-        
+
         const enrolledCourses = response.data.enrolledCourses;
-        // const courseDetailsPromises = enrolledCourses.map((course) => {
-        //   console.log("Waiting for course api response");
-        //   return axios.get(
-        //     `http://localhost:4003/api/v1/course/get/${courseId}`
-        //   );
-        // });
+        const courseDetailsPromises = enrolledCourses.map((course) => {
+          console.log("Waiting for course api response");
+          console.log(course._id);
+          return axios.get(
+            `http://localhost:4003/api/v1/course/get/${course.courseId}`
+          );
+        });
 
-        //const courseDetailsResponses = await Promise.all(courseDetailsPromises);
-        const combinedCourses = enrolledCourses;
-        // const combinedCourses = enrolledCourses.map((course, index) => {
-        //   const courseDetails = courseDetailsResponses[index].data;
-        //   return {
-        //     ...course,
-        //     preview: courseDetails.preview,
-        //     totalLessons: courseDetails.totalLessons,
-        //     InstructorId: courseDetails.InstructorId,
-        //     CourseName: courseDetails.CourseName,
-        //     description: courseDetails.description,
-        //     duration: courseDetails.duration,
-        //     level: courseDetails.level,
-        //     price: courseDetails.price,
-        //     lectureNotes: courseDetails.lectureNotes,
-        //     status: courseDetails.lectureVideos,
-        //     status: courseDetails.status,
-        //     preview: courseDetails.preview,
-        //     lessons: courseDetails.lessons,
-        //   };
-        // });
-
+        const courseDetailsResponses = await Promise.all(courseDetailsPromises);
+        // const combinedCourses = enrolledCourses;
+        const combinedCourses = enrolledCourses.map((course, index) => {
+          const courseDetails = courseDetailsResponses[index].data;
+          const previewPath = courseDetails.preview.replace(/\\/g, "/");
+          const lectureVideosPath = courseDetails.lectureVideos.replace(
+            /\\/g,
+            "/"
+          );
+          console.log(previewPath);
+          return {
+            ...course,
+            preview: `../../../course-microservice/${previewPath}`,
+            totalLessons: courseDetails.totalLessons,
+            InstructorId: courseDetails.InstructorId,
+            CourseName: courseDetails.CourseName,
+            description: courseDetails.description,
+            duration: courseDetails.duration,
+            level: courseDetails.level,
+            price: courseDetails.price,
+            lectureNotes: courseDetails.lectureNotes,
+            status: courseDetails.lectureVideos,
+            status: courseDetails.status,
+            preview: courseDetails.preview,
+            lessons: courseDetails.lessons,
+            lessonsCompleted: course.lessonsCompleted
+          };
+        });
+        
         setCourses(combinedCourses);
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
       }
     };
 
+    
     fetchEnrolledCourses();
+    
   }, []);
 
   const handleContinueLearning = (course) => {
@@ -85,6 +96,7 @@ const EnrolledCourses = () => {
               src={course.preview}
               alt={course.CourseName}
             />
+
             <div className="px-6 py-4">
               <h3 className="mb-2 text-lg font-semibold text-gray-900">
                 {course.CourseName}
@@ -112,7 +124,7 @@ const EnrolledCourses = () => {
                 Continue Learning
               </Link> */}
               <Link
-                to={`/courses/${course.courseId}`}
+                to={`/courses/${course._courseId}`}
                 onClick={() => handleContinueLearning(course)}
                 className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               >
