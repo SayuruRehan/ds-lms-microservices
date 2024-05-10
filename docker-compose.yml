@@ -12,6 +12,10 @@ services:
       context: ./course-microservice
     ports:
       - "4003:4003"
+    volumes:
+      - ./Lectures:/lectures
+      - ./Preview:/preview
+      - ./Videos:/videos
 
   service3:
     build:
