@@ -38,6 +38,7 @@ const EnrolledCourses = () => {
           console.log(previewPath);
           return {
             ...course,
+            courseId: courseDetails._id,
             preview: `../../../course-microservice/${previewPath}`,
             totalLessons: courseDetails.totalLessons,
             InstructorId: courseDetails.InstructorId,

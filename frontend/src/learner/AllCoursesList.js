@@ -38,7 +38,7 @@ function AllCourses() {
 
   const handleEnroll = async (courseId) => {
     console.log(courseId);
-    const learnerId = "567855396a149b001f8a1234";
+    const learnerId = "123f55396a149b001f8a1234";
     try {
       const response = await axios.post(
         `http://localhost:4002/learner/course/enroll?courseId=${courseId}`,
