@@ -18,10 +18,13 @@ const CoursePage = () => {
       const learnerId = "123f55396a149b001f8a1234"; // Replace with actual learner id
       const courseId = course.courseId;
 
-      const response = await axios.post("/course/unenroll", {
-        learnerId,
-        courseId,
-      });
+      const response = await axios.post(
+        "http://localhost:4002/learner/course/unenroll",
+        {
+          learnerId,
+          courseId,
+        }
+      );
 
       console.log(response.data.message); // Log success message
 
