@@ -7,9 +7,20 @@ import NavBar from "./NavBar";
 import Time from "../assets/time.png";
 import Level from "../assets/level.png";
 import LessonsIcon from "../assets/lessonsIcon.jpg";
+import image1 from "../learner/Previews/1_Multimedia.jpg"
+import image2 from "../learner/Previews/2_CodingCourse.jpg"
 
 const Enroll = () => {
   const [courses, setCourses] = useState([]);
+//   const images = [
+//     "../learner/Previews/1_Multimedia.jpg",
+//     "../learner/Previews/2_CodingCourse.jpg",
+//     "../learner/Previews/4_DeepLearning.jpg",
+//     "../learner/Previews/5_AI.jpg",
+//     "../learner/Previews/6_Python.jpg",
+//   ];
+
+const images = [{image1},{image2}]
 
   useEffect(() => {
     const learnerId = "123f55396a149b001f8a1234";
@@ -59,7 +70,7 @@ const Enroll = () => {
         <header className="absolute px-10 mb-2 top-10 md:top-52">
           <div className="items-start justify-center text-center">
             <h2 className="text-lg font-bold text-white md:text-4xl">
-              Top Courses
+              Featured Courses
             </h2>
           </div>
         </header>
@@ -67,16 +78,22 @@ const Enroll = () => {
 
       {/* Display enrolled courses */}
       <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {courses.map((course) => (
+        {courses.map((course, index) => (
           <div
             key={course._id}
             className="overflow-hidden bg-white rounded-lg shadow-lg"
           >
-            <img
+            {/* <img
               className="object-cover object-center w-full h-40"
               src={course.preview}
               alt={course.CourseName}
+            /> */}
+             <img
+              className="object-cover object-center w-full h-40"
+              src={images[index]}
+              alt={`Preview ${index}`}
             />
+
 
             <div className="flex flex-col px-6 py-4">
               <h3 className="mb-2 text-lg font-semibold text-gray-900">

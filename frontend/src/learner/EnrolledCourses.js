@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Cover from "../assets/Cover1.png";
 import HeroCover from "./HeroCover";
 
-
 const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -51,6 +50,7 @@ const EnrolledCourses = () => {
             level: courseDetails.level,
             price: courseDetails.price,
             lectureNotes: courseDetails.lectureNotes,
+            lectureVideos: courseDetails.lectureVideos,
             status: courseDetails.lectureVideos,
             status: courseDetails.status,
             preview: courseDetails.preview,
@@ -97,12 +97,15 @@ const EnrolledCourses = () => {
 
   return (
     <div className="container px-4 mx-auto">
-      <HeroCover/>
-      
-      <div className="flex justify-center gap-4" style={{ backgroundImage: `url(${Cover})` }}>
+      <HeroCover />
+
+      <div
+        className="flex justify-center gap-4"
+        style={{ backgroundImage: `url(${Cover})` }}
+      >
         <button
-           className={`px-3 py-1 mr-2 text-white ${
-            activeTab === "enrolled" ?  "border-pink-800" : "hover:bg-gray-400"
+          className={`px-3 py-1 mr-2 text-white ${
+            activeTab === "enrolled" ? "border-pink-800" : "hover:bg-gray-400"
           }`}
           // style={{borderBottom:"5px solid #8f0d47"}}
           onClick={() => setActiveTab("enrolled")}
