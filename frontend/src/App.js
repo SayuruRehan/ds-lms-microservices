@@ -18,14 +18,6 @@ import Enroll from "./learner/Enroll";
 import Header from "./components/Header";
 
 export default function App() {
-  const heroData = [
-    {text1: "Learn. Explore. ", text2: "Grow. Thrive"},
-    {text1: "Knowledge at ", text2: "Your Fingertips"},
-    {text1: "Your Gateway", text2: "to Learning"},
-  ];
-
-  const [heroCount, setHeroCount] = useState(0);
-
   return (
     <>
       <Header />
