@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 
 // Routes for Notification Management
 const courseRoutes = require("./routes/notificationRoutes");
-app.use("/api/v1/notification", courseRoutes);
+app.use("/api/v1/notification/", courseRoutes);
 
 // Listen on port
 const port = process.env.PORT || 4004;

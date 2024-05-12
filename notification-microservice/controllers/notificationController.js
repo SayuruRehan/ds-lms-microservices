@@ -1,4 +1,4 @@
-const Notification = require("../models/notification");
+const Notification = require("../models/notificationSchema");
 
 // Controller function for creating a new notification
 exports.createNotification = async (req, res) => {
@@ -13,12 +13,10 @@ exports.createNotification = async (req, res) => {
 
     await newNotification.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Notification created successfully",
-        notification: newNotification,
-      });
+    res.status(201).json({
+      message: "Notification created successfully",
+      notification: newNotification,
+    });
   } catch (error) {
     console.error("Error creating notification:", error);
     res.status(500).json({ message: "Error creating notification" });
