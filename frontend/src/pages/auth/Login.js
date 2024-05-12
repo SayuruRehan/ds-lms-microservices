@@ -6,7 +6,7 @@ import PopUp from "../../components/PopUp";
 export default function Login() {
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [tockenCookie, setTockenCookie] = useCookies(["token"]);
+  const [tokenCookie, setTokenCookie] = useCookies(["token"]);
   const [roleCookie, setRoleCookie] = useCookies("role");
   const [userIdCookie, setUserIdCookie] = useCookies("userId");
 
@@ -39,7 +39,7 @@ export default function Login() {
         expirationDate.setDate(expirationDate.getDate() + 1); // Adding 1 day
 
         // Save the token in a cookie with expiration time
-        setTockenCookie("token", responseData.token, {
+        setTokenCookie("token", responseData.token, {
           path: "/",
           expires: expirationDate, // Set expiration date
         });

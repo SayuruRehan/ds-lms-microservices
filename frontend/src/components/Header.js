@@ -13,12 +13,21 @@ const navigation = [
 
 export default function Header({fontColor, headerAbsolute}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const isLoggedIn = cookies.token !== undefined;
+  const [tockenCookie, setTokenCookie, removeTokenCookie] = useCookies([
+    "token",
+  ]);
+  const [roleCookie, setRoleCookie, removeRoleCookie] = useCookies(["role"]);
+  const [userIdcookie, setUserIdCookie, removeUserIdCookie] = useCookies([
+    "userId",
+  ]);
+
+  const isLoggedIn = tockenCookie.token !== undefined;
 
   const handleLogout = () => {
     // Delete the token cookie
-    removeCookie("token");
+    removeTokenCookie("token");
+    removeRoleCookie("role");
+    removeUserIdCookie("userId");
     // Reload the page
     window.location.reload();
   };
