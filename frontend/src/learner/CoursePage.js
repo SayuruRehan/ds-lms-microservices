@@ -8,6 +8,10 @@ import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
 import arrowIcon from "../assets/arrowLeft.png";
 import Resources from "./Resources";
+import { GiProgression } from "react-icons/gi";
+import { IoTime } from "react-icons/io5";
+import { FaBookReader } from "react-icons/fa";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 // import lectureVideos from "../../../course-microservice/"
 
 const CoursePage = () => {
@@ -50,39 +54,55 @@ const CoursePage = () => {
 
   return (
     <div className="container px-4 mx-auto">
-      <div className="flex flex-row-reverse justify-center w-full max-w-full px-20 py-10 rounded-lg shadow-md gap-28 bg-slate-100">
-        <div>
-          <h1 className="mb-4 text-3xl font-semibold">{course.CourseName}</h1>
-          <p className="mb-6 text-gray-400">{course.description}</p>
-        </div>
-        {/* Video Area */}
-        <div className="mb-6 h-9">
+      <div className="flex flex-row object-cover justify-center w-full max-w-full px-20 py-20 rounded-lg  max-h-80 shadow-md gap-28 bg-slate-200">
+        <div className="mb-6 h-9 w-96">
           <img
-            src={`../../../course-microservice/${course.preview.replace(
-              /\\/g,
-              "/"
-            )}`}
+            src={`http://localhost:4003/${course.preview.replace("\\", "/")}`}
             alt="Course Preview"
           />
           {/* <video src={course.videoUrl} className="object-cover" controls /> */}
+        </div>
+        <div>
+          <div>
+            <h1 className="mb-4 text-5xl font-semibold">{course.CourseName}</h1>
+            <p className="mb-6 text-xl text-gray-600">{course.description}</p>
+          </div>
+        
+
+          <div className="flex flex-row pt-4 pb-2 px-10 border-2 rounded-lg bg-slate-100 justify-center items-center">
+            <div className="flex flex-row flex-1 justify-center gap-2 ">
+              
+              <GiProgression />
+              <p className="">{course.level}</p>
+            </div>
+            <div className="flex flex-row  flex-1 gap-2 justify-center">
+              <FaBookReader />
+              <p>{course.lessons.length}</p>lessons
+            </div>
+            <div className="flex flex-row justify-center gap-2  flex-1">
+              <IoTime />
+              <p>{course.duration}</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="flex flex-row items-start justify-start w-full px-10 mt-8 mt-10">
         <div className="w-3/4 py-4">
           <div className="flex flex-row">
-            <img className="w-6 h-5 " src={arrowIcon} />
+            
             <button
               onClick={handleNavigation}
-              className="w-full px-4 py-2 text-blue-600 hover:text-red-500 focus:outline-none focus:shadow-outline"
+              className="w-1/4 rounded-xl hover:bg-slate-100  px-4 py-2 hover:text-slate-800 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline justify-around flex flex-row "
             >
+              <FaLongArrowAltLeft/>
               Back to Enrollments
             </button>
           </div>
-          <h2 className="mb-4 text-2xl font-semibold">Chapters</h2>
+          <h2 className=" mt-8 mb-4 text-2xl font-semibold">Chapters</h2>
           <LessonsList lessons={course.lessons} />
         </div>
-        <div className="flex flex-col w-1/4 px-4 py-8">
+        <div className="flex flex-col w-1/4 px-4 py-4">
           <button
             onClick={handleUnenroll}
             className="w-full px-4 py-2 text-white bg-red-500 rounded shadow-lg hover:bg-red-600 focus:outline-none focus:shadow-outline"

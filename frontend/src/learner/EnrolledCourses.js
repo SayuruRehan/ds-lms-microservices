@@ -139,7 +139,10 @@ const EnrolledCourses = () => {
           >
             <img
               className="object-cover object-center w-full h-40"
-              src={course.preview}
+              src={`http://localhost:4003/${course.preview.replace(
+                "\\",
+                "/"
+              )}`}
               alt={course.CourseName}
             />
 
