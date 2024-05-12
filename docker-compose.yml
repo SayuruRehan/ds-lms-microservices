@@ -1,0 +1,36 @@
+version: "1"
+
+services:
+  service1:
+    build:
+      context: ./authentication-microservice
+    ports:
+      - "4001:4001"
+
+  service2:
+    build:
+      context: ./course-microservice
+    ports:
+      - "4003:4003"
+    volumes:
+      - ./Lectures:/lectures
+      - ./Preview:/preview
+      - ./Videos:/videos
+
+  service3:
+    build:
+      context: ./learner-microservice
+    ports:
+      - "4002:4002"
+
+  service4:
+    build:
+      context: ./payment-microservice
+    ports:
+      - "4004:4004"
+
+  service5:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
