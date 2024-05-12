@@ -6,7 +6,7 @@ import logoImage from "../assets/Edu-logo.png";
 
 const navigation = [
   {name: "Home", href: "/"},
-  {name: "Courses", href: "/"},
+  {name: "Courses", href: "/all"},
   {name: "My Learnings", href: "/latestNews"},
   {name: "About Us", href: "/gallery"},
 ];
