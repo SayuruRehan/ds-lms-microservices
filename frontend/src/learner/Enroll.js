@@ -7,10 +7,12 @@ import NavBar from "./NavBar";
 import { GiProgression } from "react-icons/gi";
 import { IoTime } from "react-icons/io5";
 import { FaBookReader } from "react-icons/fa";
-import { IoMdPricetags } from "react-icons/io";
+import Modal from "./Modal";
 
 const Enroll = () => {
   const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const Enroll = () => {
     const fetchAllCourses = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4003/api/v1/course/get/`
+          `http://localhost:4003/api/v1/course/getApproved`
         );
 
         setCourses(response.data);
@@ -31,19 +33,30 @@ const Enroll = () => {
   }, []);
 
   const handleEnroll = async (course) => {
+    setSelectedCourse(course);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const confirmEnroll = async (course) => {
     // localStorage.setItem("courseData", JSON.stringify(course));
 
-    console.log(course._id);
     const learnerId = "123f55396a149b001f8a1234";
+    console.log("call proceed to payment");
+    console.log("Enrolled to " + course._id);
     try {
       const response = await axios.post(
         `http://localhost:4002/learner/course/enroll?courseId=${course._id}`,
         { learnerId }
       );
+
       console.log(response.data.message);
-      // Redirect to Success.js after successful enrollment
+
       if (response.status === 200) {
-        navigate("/enroll/success");
+        navigate("/enroll/success"); // direct to payment api
       } else {
         navigate("/enroll/unsuccess");
       }
@@ -53,8 +66,47 @@ const Enroll = () => {
     }
   };
 
-  const proceedToPayment = (course) => {
-    localStorage.setItem("courseData", JSON.stringify(course));
+  const callPayment = async (course) => {
+    // localStorage.setItem("courseData", JSON.stringify(course));
+
+    const learnerId = "123f55396a149b001f8a1234";
+    console.log("call payment API");
+    console.log("Payment for course" + course._id);
+
+    const paymentRequest = {
+      amount: course.price,
+      currency: "USD",
+      products: [
+        {
+          courseId: course._id,
+          name: course.CourseName,
+          price: course.price,
+          quantity: 1,
+        },
+      ],
+    };
+
+    try {
+      const response = await axios.post(`http://localhost:4004/api/payment`, {
+        paymentRequest,
+      });
+
+      console.log();
+
+      if (response.status === 200) {
+        console.log(
+          "Redirect to payment gateway with session id: " + response.data
+        );
+
+        //navigate("/enroll/success"); // direct to payment api
+      } else {
+        console.log("Redirection failed " + response.data);
+        //navigate("/enroll/unsuccess");
+      }
+    } catch (error) {
+      console.error("Error enrolling:", error);
+      // Handle error
+    }
   };
 
   return (
@@ -133,6 +185,60 @@ const Enroll = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {modalOpen && (
+        <Modal closeModal={closeModal}>
+          <h2 className="text-xl font-sans font-bold">
+            {selectedCourse.CourseName}
+          </h2>
+          <img
+            src={`http://localhost:4003/${selectedCourse.preview.replace(
+              "\\",
+              "/"
+            )}`}
+          />
+          <div className="flex flex-row pt-2 pb-1 px-2 rounded-lg justify-around items-center">
+            <div className="flex flex-row flex-1 justify-center gap-1 ">
+              <GiProgression />
+              <p className="">{selectedCourse.level}</p>
+            </div>
+            <div className="flex flex-row  flex-1 gap-1 justify-center">
+              <FaBookReader />
+              <p>{selectedCourse.lessons.length}</p>lessons
+            </div>
+            <div className="flex flex-row justify-center gap-1  flex-1">
+              <IoTime />
+              <p>{selectedCourse.duration}</p>
+            </div>
+          </div>
+
+          <div className="py-2 pb-2 font-semibold text-justify">
+            Instructor: {selectedCourse.instructor}
+          </div>
+          <div className="py-2 pb-2 text-justify">
+            {selectedCourse.description}
+          </div>
+          <div className="flex pt-2 flex-row  justify-between">
+            <p>Price</p>
+            <p className=" text-lg  font-sans font-bold">
+              Rs. {selectedCourse.price}/=
+            </p>
+          </div>
+          <button
+            className="py-2 px-5 text-white w-full bg-green-600"
+            onClick={() => confirmEnroll(selectedCourse)}
+          >
+            Confirm Enrollment
+          </button>
+          <button
+            className="py-2 mt-2 px-5 text-white w-full bg-blue-600"
+            onClick={() => callPayment(selectedCourse)}
+          >
+            Proceed to Payment
+          </button>
+        </Modal>
+      )}
     </div>
   );
 };

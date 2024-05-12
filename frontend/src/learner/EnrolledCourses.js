@@ -7,13 +7,12 @@ import HeroCover from "./HeroCover";
 const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [activeTab, setActiveTab] = useState("Enrolled");
+  const [activeTab, setActiveTab] = useState("enrolled");
 
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
         const learnerId = "123f55396a149b001f8a1234";
-        const courseId = "663e121fedbf471dcc4c30ff";
 
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
@@ -105,7 +104,9 @@ const EnrolledCourses = () => {
       >
         <button
           className={`px-3 py-1 mr-2 text-white ${
-            activeTab === "enrolled" ? "border-pink-800" : "hover:bg-gray-400"
+            activeTab === "enrolled"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
           // style={{borderBottom:"5px solid #8f0d47"}}
           onClick={() => setActiveTab("enrolled")}
@@ -113,16 +114,20 @@ const EnrolledCourses = () => {
           All
         </button>
         <button
-          className={`px-3 py-3 mr-2 text-white bg-gray-300 rounded ${
-            activeTab === "active" ? "bg-blue-500" : "hover:bg-gray-400"
+          className={`px-3 py-3 mr-2 text-white ${
+            activeTab === "active"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("active")}
         >
           Active Courses
         </button>
         <button
-          className={`px-3 py-1 text-white bg-gray-300 rounded ${
-            activeTab === "completed" ? "bg-blue-500" : "hover:bg-gray-400"
+          className={`px-3 py-1 text-white rounded ${
+            activeTab === "completed"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("completed")}
         >
@@ -139,10 +144,7 @@ const EnrolledCourses = () => {
           >
             <img
               className="object-cover object-center w-full h-40"
-              src={`http://localhost:4003/${course.preview.replace(
-                "\\",
-                "/"
-              )}`}
+              src={`http://localhost:4003/${course.preview.replace("\\", "/")}`}
               alt={course.CourseName}
             />
 
