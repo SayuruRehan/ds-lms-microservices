@@ -39,12 +39,12 @@ const CoursePage = () => {
         }
       );
 
-      toast.success("You unenrolled successfully"); // Success toast
-
+      alert("You unenrolled successfully"); // Success alert
+      navigate("/enrolledCourses");
       console.log(response.data.message); // Log success message
     } catch (error) {
       console.error("Error unenrolling:", error);
-      toast.error("Error unenrolling"); // Error toast
+      alert("Error unenrolling"); // Error alert
     }
   };
 
@@ -67,11 +67,9 @@ const CoursePage = () => {
             <h1 className="mb-4 text-5xl font-semibold">{course.CourseName}</h1>
             <p className="mb-6 text-xl text-gray-600">{course.description}</p>
           </div>
-        
 
           <div className="flex flex-row pt-4 pb-2 px-10 border-2 rounded-lg bg-slate-100 justify-center items-center">
             <div className="flex flex-row flex-1 justify-center gap-2 ">
-              
               <GiProgression />
               <p className="">{course.level}</p>
             </div>
@@ -90,12 +88,11 @@ const CoursePage = () => {
       <div className="flex flex-row items-start justify-start w-full px-10 mt-8 mt-10">
         <div className="w-3/4 py-4">
           <div className="flex flex-row">
-            
             <button
               onClick={handleNavigation}
               className="w-1/4 rounded-xl hover:bg-slate-100  px-4 py-2 hover:text-slate-800 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline justify-around flex flex-row "
             >
-              <FaLongArrowAltLeft/>
+              <FaLongArrowAltLeft />
               Back to Enrollments
             </button>
           </div>
