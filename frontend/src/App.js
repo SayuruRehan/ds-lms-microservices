@@ -16,6 +16,7 @@ import Success from "./learner/Success";
 import Unsuccess from "./learner/Unsuccess";
 import Enroll from "./learner/Enroll";
 import Header from "./components/Header";
+import Footer from "./components/Background/Footer";
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="/edit/:courseId" element={<EditCourseForm />} />
         </Routes>
       </Router>
+      <Footer />
     </>
   );
 }
