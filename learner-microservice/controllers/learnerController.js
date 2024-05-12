@@ -40,7 +40,6 @@ router.post("/course/enroll", async (req, res) => {
   }
 });
 
-
 // --------------------------- Unenroll -------------------------------------
 router.post("/course/unenroll", async (req, res) => {
   try {
@@ -93,5 +92,29 @@ router.get("/enrollments/:learnerId", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+//  ---------------------------- create a new learner ------------------------------
+router.post("/create", async (req, res) => {
+  try {
+    const { learnerId } = req.body;
+
+    // Check if learner already exists
+    const existingLearner = await Learner.findOne({ learnerId });
+    if (existingLearner) {
+      return res.status(400).json({ error: "Learner already exists" });
+    }
+
+    const newLearner = new Learner(req.body)
+    await newLearner.save();
+    res
+      .status(201)
+      .json({ message: "Learner created successfully", learner: newLearner });
+  } catch (error) {
+    console.error("Error creating learner:", error);
+
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 module.exports = router;
