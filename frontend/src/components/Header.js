@@ -7,8 +7,8 @@ import logoImage from "../assets/Edu-logo.png";
 const navigation = [
   {name: "Home", href: "/"},
   {name: "Courses", href: "/all"},
-  {name: "My Learnings", href: "/latestNews"},
-  {name: "About Us", href: "/gallery"},
+  {name: "My Learnings", href: "/enrolledCourses"},
+  {name: "About Us", href: "/about-us"},
 ];
 
 export default function Header({fontColor, headerAbsolute}) {
