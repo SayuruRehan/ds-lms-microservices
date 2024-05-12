@@ -15,6 +15,7 @@ import EditCourseForm from "./course/EditCourseForm";
 import AllCourses from "./learner/AllCoursesList";
 import Success from "./learner/Success";
 import Unsuccess from "./learner/Unsuccess";
+import Enroll from "./learner/Enroll";
 
 export default function App() {
   const heroData = [
@@ -51,7 +52,7 @@ export default function App() {
         <Route path="/enrolledCourses" element={<EnrolledCourses />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/courses/:courseID" element={<CoursePage />} />
-        <Route path="/all" element={<AllCourses />} />
+        <Route path="/all" element={<Enroll />} />
         <Route path="/enroll/success" element={<Success />} />
         <Route path="/enroll/unsuccess" element={<Unsuccess />} />
 

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Cover from "../assets/Cover1.png";
+import HeroCover from "./HeroCover";
 
 const EnrolledCourses = () => {
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
-  const [activeTab, setActiveTab] = useState("Enrolled");
+  const [activeTab, setActiveTab] = useState("enrolled");
 
   useEffect(() => {
     const fetchEnrolledCourses = async () => {
       try {
         const learnerId = "123f55396a149b001f8a1234";
-        const courseId = "663e121fedbf471dcc4c30ff";
 
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
@@ -48,6 +49,7 @@ const EnrolledCourses = () => {
             level: courseDetails.level,
             price: courseDetails.price,
             lectureNotes: courseDetails.lectureNotes,
+            lectureVideos: courseDetails.lectureVideos,
             status: courseDetails.lectureVideos,
             status: courseDetails.status,
             preview: courseDetails.preview,
@@ -57,6 +59,7 @@ const EnrolledCourses = () => {
         });
 
         setCourses(combinedCourses);
+        filterCourses("enrolled"); // Set initial filtered courses to all enrolled courses
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
       }
@@ -93,27 +96,38 @@ const EnrolledCourses = () => {
 
   return (
     <div className="container px-4 mx-auto">
-      <h1 className="mb-4 text-3xl font-semibold">Enrolled Courses</h1>
-      <div className="flex mb-4">
+      <HeroCover />
+
+      <div
+        className="flex justify-center gap-4"
+        style={{ backgroundImage: `url(${Cover})` }}
+      >
         <button
-           className={`px-3 py-1 mr-2 text-white bg-blue-500 rounded ${
-            activeTab === "enrolled" ? "bg-blue-700" : "hover:bg-blue-700"
+          className={`px-3 py-1 mr-2 text-white ${
+            activeTab === "enrolled"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
+          // style={{borderBottom:"5px solid #8f0d47"}}
           onClick={() => setActiveTab("enrolled")}
         >
-          Enrolled Courses
+          All
         </button>
         <button
-          className={`px-3 py-1 mr-2 text-white bg-gray-300 rounded ${
-            activeTab === "active" ? "bg-blue-500" : "hover:bg-gray-400"
+          className={`px-3 py-3 mr-2 text-white ${
+            activeTab === "active"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("active")}
         >
           Active Courses
         </button>
         <button
-          className={`px-3 py-1 text-white bg-gray-300 rounded ${
-            activeTab === "completed" ? "bg-blue-500" : "hover:bg-gray-400"
+          className={`px-3 py-1 text-white rounded ${
+            activeTab === "completed"
+              ? "bg-pink-500 rounded-lg"
+              : "hover:bg-pink-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("completed")}
         >
@@ -130,7 +144,7 @@ const EnrolledCourses = () => {
           >
             <img
               className="object-cover object-center w-full h-40"
-              src={course.preview}
+              src={`http://localhost:4003/${course.preview.replace("\\", "/")}`}
               alt={course.CourseName}
             />
 
