@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import ConfirmationModal from "./ConfirmationModal"; // Import the ConfirmationModal component
 
 function CourseList() {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(null);
   const [expandedCourseId, setExpandedCourseId] = useState(null);
   const [activeTab, setActiveTab] = useState("approved"); // State to track active tab
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false); // State to control the visibility of the confirmation modal
+  const [courseToDelete, setCourseToDelete] = useState(null); // State to store the course to delete
   const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
@@ -47,6 +50,25 @@ function CourseList() {
   const handleEdit = (courseId) => {
     // Navigate to the edit page with courseId as a parameter
     navigate(`/edit/${courseId}`);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:4003/api/v1/course/delete/${courseToDelete}`);
+      // After successful deletion, fetch the updated course list
+      fetchCourses();
+      // Close the confirmation modal
+      setShowConfirmationModal(false);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      setError("Error deleting course. Please try again later.");
+    }
+  };
+
+  const handleShowConfirmationModal = (courseId) => {
+    // Set the course to delete and show the confirmation modal
+    setCourseToDelete(courseId);
+    setShowConfirmationModal(true);
   };
 
   if (error) {
@@ -162,11 +184,17 @@ function CourseList() {
                   {activeTab === "pending" && (
                     <button
                       onClick={() => handleEdit(course._id)}
-                      className="text-green-500 hover:underline"
+                      className="text-green-500 hover:underline mr-2"
                     >
                       Edit
                     </button>
                   )}
+                  <button
+                    onClick={() => handleShowConfirmationModal(course._id)}
+                    className="text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
                 </div>
               )}
             </div>
@@ -183,6 +211,14 @@ function CourseList() {
           </div>
         ))}
       </div>
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <ConfirmationModal
+          message="Are you sure you want to delete this course?"
+          onCancel={() => setShowConfirmationModal(false)}
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 }
