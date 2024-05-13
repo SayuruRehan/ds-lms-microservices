@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import EnrollBackground from "../assets/enroll.jpg";
 import HeroCover from "./HeroCover";
 import NavBar from "./NavBar";
-import { GiProgression } from "react-icons/gi";
-import { IoTime } from "react-icons/io5";
-import { FaBookReader } from "react-icons/fa";
+import {GiProgression} from "react-icons/gi";
+import {IoTime} from "react-icons/io5";
+import {FaBookReader} from "react-icons/fa";
 import Modal from "./Modal";
 
 const Enroll = () => {
@@ -50,7 +50,7 @@ const Enroll = () => {
     try {
       const response = await axios.post(
         `http://localhost:4002/learner/course/enroll?courseId=${course._id}`,
-        { learnerId }
+        {learnerId}
       );
 
       console.log(response.data.message);
@@ -73,39 +73,34 @@ const Enroll = () => {
     console.log("call payment API");
     console.log("Payment for course" + course._id);
 
-    const paymentRequest = {
-      amount: course.price,
-      currency: "USD",
+    const imagePath = course.preview.replace(/\\/g, "/");
+
+    const items = {
       products: [
         {
-          courseId: course._id,
           name: course.CourseName,
           price: course.price,
+          images: [`http://localhost:4003/${imagePath}`],
           quantity: 1,
         },
       ],
     };
-
     try {
       const response = await axios.post(`http://localhost:4004/api/payment`, {
-        paymentRequest,
+        items: items,
       });
 
-      console.log();
-
       if (response.status === 200) {
-        console.log(
-          "Redirect to payment gateway with session id: " + response.data
-        );
-
-        //navigate("/enroll/success"); // direct to payment api
+        console.log(response.data.url);
+        //navigate to the stripe generated payment url
+        window.location.href = response.data.url;
       } else {
-        console.log("Redirection failed " + response.data);
-        //navigate("/enroll/unsuccess");
+        navigate("/enroll/unsuccess");
       }
     } catch (error) {
       console.error("Error enrolling:", error);
       // Handle error
+      navigate("/enroll/unsuccess");
     }
   };
 
@@ -113,7 +108,7 @@ const Enroll = () => {
     <div className="container px-4 mx-auto">
       <div
         className="relative inset-0 z-0 bg-center bg-cover"
-        style={{ height: "50vh" }}
+        style={{height: "50vh"}}
       >
         <div
           className="absolute inset-0 z-0 bg-gray-800"

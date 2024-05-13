@@ -1,64 +1,102 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import {useCookies} from "react-cookie";
+
 import Home from "./components/Background/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import Profile from "./pages/Profile";
+import Header from "./components/Header";
+import Dashboard from "./components/Dashboard";
+import Footer from "./components/Background/Footer";
+import PageNotFound from "./pages/PageNotFound";
 
 import EnrolledCourses from "./learner/EnrolledCourses";
-import Dashboard from "./learner/Dashboard";
 import CoursePage from "./learner/CoursePage";
-import AddCourseForm from "./course/AddCourseForm";
-import CourseList from "./course/CourseList";
-import AdminCourseView from "./course/AdminCourseView";
-import EditCourseForm from "./course/EditCourseForm";
-import AllCourses from "./learner/AllCoursesList";
 import Success from "./learner/Success";
 import Unsuccess from "./learner/Unsuccess";
 import Enroll from "./learner/Enroll";
 
-export default function App() {
-  const heroData = [
-    { text1: "Learn. Explore. ", text2: "Grow. Thrive" },
-    { text1: "Knowledge at ", text2: "Your Fingertips" },
-    { text1: "Your Gateway", text2: "to Learning" },
-  ];
+import AddCourseForm from "./course/AddCourseForm";
+import CourseList from "./course/CourseList";
+import AdminCourseView from "./course/AdminCourseView";
+import EditCourseForm from "./course/EditCourseForm";
 
-  const [heroCount, setHeroCount] = useState(0);
+export default function App() {
+  const [tokenCookie] = useCookies(["token"]);
+  const [roleCookie] = useCookies(["role"]);
+
+  const isAuthenticated = () => {
+    return tokenCookie.token !== undefined && roleCookie.role !== undefined;
+  };
 
   return (
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              heroCount={heroCount}
-              heroData={heroData}
-              setHeroCount={setHeroCount}
-            />
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
+      <div className="">
+        <Header />
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<PageNotFound />} />
 
-        <Route path="/addCourse" element={<AddCourseForm />} />
-        <Route path="/list" element={<CourseList />} />
-        {/* <Route path="/video" element={<UploadVideo />} />
-        <Route path="/vlist" element={<LectureVideos />} /> */}
-
-        {/* Learner Routes */}
-        <Route path="/enrolledCourses" element={<EnrolledCourses />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/courses/:courseID" element={<CoursePage />} />
-        <Route path="/all" element={<Enroll />} />
-        <Route path="/enroll/success" element={<Success />} />
-        <Route path="/enroll/unsuccess" element={<Unsuccess />} />
-
-        <Route path="/adminList" element={<AdminCourseView />} />
-        <Route path="/edit/:courseId" element={<EditCourseForm />} />
-      </Routes>
+          {/* Protected routes */}
+          {isAuthenticated() && (
+            <>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              {roleCookie.role === "instructor" ||
+              roleCookie.role === "admin" ? (
+                <>
+                  <Route path="/addCourse" element={<AddCourseForm />} />
+                  <Route path="/list" element={<CourseList />} />
+                  <Route path="/edit/:courseId" element={<EditCourseForm />} />
+                  <Route path="/all" element={<Enroll />} />
+                  <Route path="/courses/:courseID" element={<CoursePage />} />
+                  <Route
+                    path="/enrolledCourses"
+                    element={<EnrolledCourses />}
+                  />
+                  <Route path="/enroll/success" element={<Success />} />
+                  <Route path="/enroll/unsuccess" element={<Unsuccess />} />
+                </>
+              ) : null}
+              {roleCookie.role === "admin" ? (
+                <>
+                  <Route path="/adminList" element={<AdminCourseView />} />
+                  <Route path="/all" element={<Enroll />} />
+                  <Route path="/courses/:courseID" element={<CoursePage />} />
+                  <Route
+                    path="/enrolledCourses"
+                    element={<EnrolledCourses />}
+                  />
+                  <Route path="/enroll/success" element={<Success />} />
+                  <Route path="/enroll/unsuccess" element={<Unsuccess />} />
+                </>
+              ) : null}
+              {roleCookie.role === "learner" ? (
+                <>
+                  <Route path="/all" element={<Enroll />} />
+                  <Route path="/courses/:courseID" element={<CoursePage />} />
+                  <Route
+                    path="/enrolledCourses"
+                    element={<EnrolledCourses />}
+                  />
+                  <Route path="/enroll/success" element={<Success />} />
+                  <Route path="/enroll/unsuccess" element={<Unsuccess />} />
+                </>
+              ) : null}
+            </>
+          )}
+        </Routes>
+        <Footer />
+      </div>
     </Router>
   );
 }

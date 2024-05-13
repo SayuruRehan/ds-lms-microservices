@@ -31,6 +31,12 @@ services:
 
   service5:
     build:
+      context: ./notification-microservice
+    ports:
+      - "4005:4005"
+
+  service6:
+    build:
       context: ./frontend
     ports:
       - "3000:3000"

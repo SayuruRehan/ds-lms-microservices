@@ -4,9 +4,9 @@ import "./index.css";
 import "antd/dist/reset.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ToastContainer } from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
