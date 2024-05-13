@@ -1,30 +1,26 @@
 const Notification = require("../models/notificationSchema");
-const nodemailer = require("nodemailer");
+const sgMail = require("@sendgrid/mail");
+
+// Set your SendGrid API key
+sgMail.setApiKey(
+  "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"
+);
 
 const sendEmail = async (to, subject, text) => {
-  // Create a Nodemailer transporter
-  let transporter = nodemailer.createTransport({
-    host: "smtp.example.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: "yourusername@example.com",
-      pass: "yourpassword",
-    },
-  });
-
-  // Define email options
-  let mailOptions = {
-    from: "yourusername@example.com",
-    to: to,
-    subject: subject,
-    text: text,
+  const msg = {
+    to,
+    from: "kavi.fernando2001@gmail.com", // Ensure this email address is verified in your SendGrid account
+    subject,
+    text,
   };
 
-  // Send email
-  let info = await transporter.sendMail(mailOptions);
-
-  console.log("Message sent: %s", info.messageId);
+  try {
+    await sgMail.send(msg);
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
 };
 
 // Controller function for creating a new notification
@@ -42,7 +38,7 @@ exports.createNotification = async (req, res) => {
 
     // Send email notification
     await sendEmail(
-      "recipient@example.com",
+      "yasho.fernando2005@gmail.com",
       "New Notification",
       `Title: ${title}\nMessage: ${message}`
     );
