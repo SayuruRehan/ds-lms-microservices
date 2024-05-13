@@ -163,7 +163,7 @@ const Enroll = () => {
               <div className="flex flex-row justify-around gap-1 item-center ">
                 <div className="flex flex-row p-0 justify-centeritems-center">
                   <p className="text-xl font-bold text-stone-900 ">
-                    LKR.{course.price}
+                    LKR {course.price}
                   </p>
                 </div>
                 <div>
@@ -217,7 +217,7 @@ const Enroll = () => {
           <div className="flex flex-row justify-between pt-2">
             <p>Price</p>
             <p className="font-sans text-lg font-bold ">
-              Rs. {selectedCourse.price}/=
+              LKR {selectedCourse.price}
             </p>
           </div>
           <button
