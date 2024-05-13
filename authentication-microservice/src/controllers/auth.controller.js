@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import User from "../schemas/user.schema.js";
-import {config} from "dotenv";
+import { config } from "dotenv";
 
 config();
 
 const generateToken = (res, userId, role) => {
   const jwtSecret = process.env.JWT_SECRET;
-  const token = jwt.sign({userId, role}, jwtSecret, {
+  const token = jwt.sign({ userId, role }, jwtSecret, {
     expiresIn: "24h",
   });
 
@@ -29,33 +29,33 @@ const clearToken = (res) => {
 
 async function login(req, res) {
   try {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({message: "Invalid Credentials"});
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
     const isMatch = await user.checkPassword(password);
     if (!isMatch) {
-      return res.status(401).json({message: "Invalid Credentials"});
+      return res.status(401).json({ message: "Invalid Credentials" });
     }
     const token = generateToken(res, user._id, user.role);
-    res.send({token, role: user.role, user_id: user._id});
+    res.send({ token, role: user.role, user_id: user._id });
   } catch (error) {
     console.error(error);
-    res.status(500).json({message: error.message});
+    res.status(500).json({ message: error.message });
   }
 }
 
 async function register(req, res) {
   try {
-    const {name, email, password, NIC, role} = req.body;
-    const user = new User({name, email, password, NIC, role});
+    const { name, email, password, NIC, role } = req.body;
+    const user = new User({ name, email, password, NIC, role });
     await user.save();
-    res.status(201).json({message: "User created"});
+    res.status(201).json({ message: "User created" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({message: error.message});
+    res.status(500).json({ message: error.message });
   }
 }
 
-export {login, register};
+export { login, register };

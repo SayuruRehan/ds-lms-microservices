@@ -87,7 +87,6 @@ function AdminCourseView() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-semibold mb-6">Course List</h1>
       <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2">
         {courses.map((course, index) => (
           <div
@@ -110,7 +109,21 @@ function AdminCourseView() {
                 />
               )}
               {expandedCourseId === course._id && (
-                <div>{/* Details about the course */}</div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Course Details</h3>
+                  <p>Description: {course.description}</p>
+                  <p>Duration: {course.duration}</p>
+                  <p>Level: {course.level}</p>
+                  <p>Price: ${course.price}</p>
+                  <p>Total Lessons: {course.totalLessons}</p>
+                  <ul>
+                    {course.lessons.map((lesson, index) => (
+                      <li key={index}>
+                        <strong>{lesson.title}</strong>: {lesson.description}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
             <div className="bg-gray-100 px-6 py-4">
@@ -142,7 +155,6 @@ function AdminCourseView() {
           </div>
         ))}
       </div>
-      {/* Confirmation Modal */}
       {showConfirmationModal && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-md">

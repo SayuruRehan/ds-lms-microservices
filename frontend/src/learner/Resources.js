@@ -6,7 +6,6 @@ const Resources = ({ lectureNotes, lectureVideos }) => {
     const path = `Viewing PDF: ${lectureNotes}`;
 
     console.log(path);
-
   };
 
   const handleNotesDownload = (resource, type) => {
@@ -26,26 +25,41 @@ const Resources = ({ lectureNotes, lectureVideos }) => {
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row flex-grow gap-1 text-center">
           <p className="mr-2 text-gray-700">Lecture Notes</p>
-          <FaEye
+          {/* <FaEye
             className="ml-4 mr-2 text-blue-500 cursor-pointer"
             onClick={() => handleNotesView(lectureNotes)}
-          />
-          <FaDownload
-            className= "mr-2 text-green-500 cursor-pointer"
+          /> */}
+          {lectureNotes && (
+            <a
+              href={`http://localhost:4003/${lectureNotes.replace("\\", "/")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View PDF
+            </a>
+          )}
+          {/* <FaDownload
+            className="mr-2 text-green-500 cursor-pointer"
             onClick={() => handleNotesDownload(lectureNotes)}
-          />
+          /> */}
+          <p className="mr-2 text-gray-700">Lecture Notes</p>
+          {lectureVideos && (
+            <a
+              href={`http://localhost:4003/${lectureVideos.replace("\\", "/")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              View Video
+            </a>
+          )}
         </div>
 
         <div className="flex flex-grow gap-1 text-center">
-          <p className="text-gray-700">Lecture Videos</p>
-          <FaEye
-            className="ml-4 mr-2 text-blue-500 cursor-pointer"
-           
-          />
-          <FaDownload
-            className="mr-2 text-green-500 cursor-pointer"
-           
-          />
+          {/* <p className="text-gray-700">Lecture Videos</p> */}
+          {/* <FaEye className="ml-4 mr-2 text-blue-500 cursor-pointer" />
+          <FaDownload className="mr-2 text-green-500 cursor-pointer" /> */}
         </div>
       </div>
     </div>
