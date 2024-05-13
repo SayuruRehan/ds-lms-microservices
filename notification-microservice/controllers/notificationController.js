@@ -7,7 +7,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const sendEmail = async (to, subject, text) => {
   const msg = {
     to,
-    from: "udanthagunathilaka2020@gmail.com", // Ensure this email address is verified in your SendGrid account
+    from: "udanthagunathilaka2020@gmail.com",
     subject,
     text,
   };
@@ -26,7 +26,7 @@ const sendEmail = async (to, subject, text) => {
 // Controller function for creating a new notification
 exports.createNotification = async (req, res) => {
   try {
-    const {title, message, role} = req.body;
+    const { title, message, role } = req.body;
 
     const newNotification = new Notification({
       title,
@@ -45,6 +45,6 @@ exports.createNotification = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating notification:", error);
-    res.status(500).json({message: "Error creating notification"});
+    res.status(500).json({ message: "Error creating notification" });
   }
 };
