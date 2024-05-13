@@ -66,8 +66,8 @@ const AddCourseForm = () => {
   };
 
   const handleSubmitStep1 = (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    nextStep(); // Move to the next step
+    e.preventDefault();
+    nextStep();
   };
 
   const handleSubmit = async (e) => {
@@ -285,8 +285,10 @@ const AddCourseForm = () => {
       );
     case 2:
       return (
-        <div className="bg-cover bg-center min-h-screen flex items-center justify-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div
+          className="bg-cover bg-center min-h-screen flex items-center justify-center"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        >
           <div className="max-w-md mx-auto">
             <h2 className="text-2xl font-bold mb-4">Add Course - Step 2</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
