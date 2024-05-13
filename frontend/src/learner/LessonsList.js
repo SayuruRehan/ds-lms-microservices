@@ -5,32 +5,35 @@ import axios from "axios";
 const LessonsList = ({ lessons, courseId }) => {
   const learnerId = "123f55396a149b001f8a1234";
   const [completedLessons, setCompletedLessons] = useState([]);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alertFailed, setAlertFailed] = useState("");
+  const [alertSuccess, setAlertSuccess] = useState("");
 
   console.log(courseId);
-  
+
   useEffect(() => {
     const fetchCompletedLessons = async () => {
-    
       try {
-        const learnerId = "123f55396a149b001f8a1234";
+        // const learnerId = "123f55396a149b001f8a1234";
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
         );
-        
-        console.log("------------ " + response)
-        
+
+        console.log("------------ " + response.data.enrolledCourses);
+        console.log("Course ID: " + courseId);
+        console.log("Learner ID: " + `${learnerId}`)
+
         if (response.data && response.data.enrolledCourses) {
           const enrolledCourse = response.data.enrolledCourses.find(
             (course) => course.courseId === courseId
           );
+          console.log(enrolledCourse);
           if (enrolledCourse) {
             setCompletedLessons(
-              enrolledCourse.lessonsCompleted.map((lesson) => lesson.lessonId)
+              enrolledCourse.lessonsCompleted.map((lesson) => lesson._id)
             );
           }
-        }else{
-          console.log("enrollments api not give any response")
+        } else {
+          console.log("enrollments api not give any response");
         }
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
@@ -44,10 +47,10 @@ const LessonsList = ({ lessons, courseId }) => {
     try {
       // Call the API to update lesson completion status
       const response = await axios.post(
-        "http://localhost:4002/lesson/complete",
+        "http://localhost:4002/progress/lesson/complete",
         {
           learnerId,
-          courseId: lessons.courseId,
+          courseId,
           lessonId,
           totalLessons: lessons.length,
         }
@@ -60,23 +63,26 @@ const LessonsList = ({ lessons, courseId }) => {
       } else {
         setCompletedLessons(completedLessons.filter((id) => id !== lessonId));
       }
-      setAlertMessage("Lesson completion status updated successfully.");
+      setAlertSuccess("Lesson completion status updated successfully.");
     } catch (error) {
       console.error("Error updating lesson completion:", error);
-      setAlertMessage("Failed to update lesson completion status.");
+      setAlertFailed("Failed to update lesson completion status.");
     }
   };
 
-  console.log(lessons);
-
   return (
     <div className="flex-1">
-      
-      {alertMessage && (
-        <div className="p-2 mb-4 text-green-800 bg-green-200 rounded">
-          {alertMessage}
+      {alertSuccess && (
+        <div className="p-3 mb-4 text-green-800 bg-green-200 rounded">
+          {alertSuccess}
         </div>
       )}
+      {alertFailed && (
+        <div className="p-3 mb-4 text-red-800 bg-red-200 rounded">
+          {alertFailed}
+        </div>
+      )}
+
       <div className="space-y-4">
         {lessons.map((lesson, index) => (
           <div

@@ -85,7 +85,7 @@ const CoursePage = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-start justify-start w-full px-10 mt-8 mt-10">
+      <div className="flex flex-row items-start justify-start w-full mt-3 px-10">
         <div className="w-3/4 py-4">
           <div className="flex flex-row">
             <button
@@ -97,7 +97,7 @@ const CoursePage = () => {
             </button>
           </div>
           <h2 className=" mt-8 mb-4 text-2xl font-semibold">Chapters</h2>
-          <LessonsList lessons={course.lessons} />
+          <LessonsList lessons={course.lessons} courseId={course._id} />
         </div>
         <div className="flex flex-col w-1/4 px-4 py-4">
           <button

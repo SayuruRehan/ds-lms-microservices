@@ -17,6 +17,7 @@ const EnrolledCourses = () => {
         const response = await axios.get(
           `http://localhost:4002/learner/enrollments/${learnerId}`
         );
+        console.log(response.data.enrolledCourses);
 
         const enrolledCourses = response.data.enrolledCourses;
         const courseDetailsPromises = enrolledCourses.map((course) => {
@@ -111,7 +112,7 @@ const EnrolledCourses = () => {
           // style={{borderBottom:"5px solid #8f0d47"}}
           onClick={() => setActiveTab("enrolled")}
         >
-          All
+          All Courses
         </button>
         <button
           className={`px-3 py-3 mr-2 text-white ${
@@ -167,7 +168,7 @@ const EnrolledCourses = () => {
               <p className="mb-2 text-gray-700">{course.progress}% Completed</p>
 
               <Link
-                to={`/courses/${course._courseId}`}
+                to={`/courses/${course.courseId}`}
                 onClick={() => handleContinueLearning(course)}
                 className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               >
