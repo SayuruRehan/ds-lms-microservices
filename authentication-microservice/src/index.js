@@ -1,13 +1,20 @@
-import { config } from "dotenv";
+import {config} from "dotenv";
 import express from "express";
-import { connectDB } from "../configs/DBConnect.js";
-import { login, register } from "./controllers/auth.controller.js";
-
+import {connectDB} from "../configs/DBConnect.js";
+import {login, register} from "./controllers/auth.controller.js";
 
 config();
 
 export const authService = express();
 authService.use(express.json());
+
+// Middleware to set headers for CORS
+authService.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // Allow specified methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allow specified headers
+  next();
+});
 
 const port = process.env.AUTH_PORT;
 
@@ -27,5 +34,5 @@ authService.post("/test", (req, res) => {
   res.status(200).send("Response from auth server");
 });
 
-authService.post("/login", login)
-authService.post("/register", register)
+authService.post("/login", login);
+authService.post("/register", register);

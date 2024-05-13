@@ -1,6 +1,13 @@
-FROM node:20
-WORKDIR /src
-COPY package*.json ./
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json .
+
 RUN npm install
-CMD ["nodemon", "src/index.js"]
+
+COPY . .
+
+CMD ["npm", "start"]
+
 EXPOSE 4001

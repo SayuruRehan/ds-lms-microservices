@@ -70,8 +70,8 @@ const LessonsList = ({ lessons, courseId }) => {
   console.log(lessons);
 
   return (
-    <div className="flex-1 mr-4">
-      <h2 className="mb-4 text-lg font-semibold">Chapters</h2>
+    <div className="flex-1">
+      
       {alertMessage && (
         <div className="p-2 mb-4 text-green-800 bg-green-200 rounded">
           {alertMessage}

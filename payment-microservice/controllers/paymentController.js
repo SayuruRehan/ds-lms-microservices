@@ -3,32 +3,32 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 // Add Payment
 const addPayment = async (req, res) => {
-  console.log("add payment");
-  const {amount, currency, products} = req.body;
+  const {items} = req.body;
+  const currency = "lkr";
 
   try {
     // Create a new Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: products.map((product) => ({
+      mode: "payment",
+      success_url: "http://localhost:3000/enroll/success",
+      cancel_url: "http://localhost:3000/enroll/unsuccess",
+      line_items: items.products.map((product) => ({
         price_data: {
           currency,
           product_data: {
             name: product.name,
+            images: [product.images[0]],
           },
           unit_amount: product.price * 100, // amount in cents
         },
         quantity: product.quantity,
       })),
-      mode: "payment",
-      success_url: "https://yourwebsite.com/success",
-      cancel_url: "https://yourwebsite.com/cancel",
     });
 
-    res.json({sessionId: session.id});
+    res.json({url: session.url});
   } catch (error) {
-    console.error("Error creating checkout session:", error);
-    // https://checkout.stripe.com/pay/:session_id us this in front end or install dependency
+    console.error("Error creating checkout payment :", error);
     res
       .status(500)
       .json({error: "An error occurred while creating checkout session"});
