@@ -90,8 +90,6 @@ const Enroll = () => {
         items: items,
       });
 
-      console.log();
-
       if (response.status === 200) {
         console.log(response.data.url);
         //navigate to the stripe generated payment url
@@ -102,6 +100,7 @@ const Enroll = () => {
     } catch (error) {
       console.error("Error enrolling:", error);
       // Handle error
+      navigate("/enroll/unsuccess");
     }
   };
 
