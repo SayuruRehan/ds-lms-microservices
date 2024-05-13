@@ -14,7 +14,7 @@ import StudentImg from "../assets/student-img.jpg";
 export default function Dashboard() {
   const navigate = useNavigate();
   return (
-    <div className="flex ml-5 mr-5 mt-10 mb-20">
+    <div className="flex ml-5 mr-5 mt-10 mb-20 justify-center items-center">
       <Card className="mt-6 w-96">
         <CardHeader color="blue-gray" className="relative h-56">
           <img src={AdminImg} alt="card-image" />
