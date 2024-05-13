@@ -6,11 +6,13 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+import {useNavigate} from "react-router-dom";
 import AdminImg from "../assets/admin-img.jpg";
 import InstructorImg from "../assets/instructor-img.jpg";
 import StudentImg from "../assets/student-img.jpg";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   return (
     <div className="flex ml-5 mr-5 mt-10 mb-20">
       <Card className="mt-6 w-96">
@@ -30,7 +32,7 @@ export default function Dashboard() {
           </Typography>
         </CardBody>
         <CardFooter className="pt-0 text-center">
-          <Button>Enter</Button>
+          <Button onClick={() => navigate("/adminList")}>Enter</Button>
         </CardFooter>
       </Card>
       <Card className="mt-6 w-96 ml-5">
@@ -51,7 +53,7 @@ export default function Dashboard() {
           </Typography>
         </CardBody>
         <CardFooter className="pt-0 text-center">
-          <Button>Enter</Button>
+          <Button onClick={() => navigate("/list")}>Enter</Button>
         </CardFooter>
       </Card>
       <Card className="mt-6 w-96 ml-5">
@@ -72,7 +74,7 @@ export default function Dashboard() {
           </Typography>
         </CardBody>
         <CardFooter className="pt-0 text-center">
-          <Button>Enter</Button>
+          <Button onClick={() => navigate("/")}>Enter</Button>
         </CardFooter>
       </Card>
     </div>
