@@ -2,17 +2,17 @@ const Notification = require("../models/notificationSchema");
 const sgMail = require("@sendgrid/mail");
 
 // Set your SendGrid API key
-sgMail.setApiKey(
-  "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"
-);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendEmail = async (to, subject, text) => {
   const msg = {
     to,
-    from: "kavi.fernando2001@gmail.com", // Ensure this email address is verified in your SendGrid account
+    from: "udanthagunathilaka2020@gmail.com", // Ensure this email address is verified in your SendGrid account
     subject,
     text,
   };
+
+  console.log(msg);
 
   try {
     await sgMail.send(msg);
@@ -26,7 +26,7 @@ const sendEmail = async (to, subject, text) => {
 // Controller function for creating a new notification
 exports.createNotification = async (req, res) => {
   try {
-    const { title, message, role } = req.body;
+    const {title, message, role} = req.body;
 
     const newNotification = new Notification({
       title,
@@ -37,11 +37,7 @@ exports.createNotification = async (req, res) => {
     await newNotification.save();
 
     // Send email notification
-    await sendEmail(
-      "yasho.fernando2005@gmail.com",
-      "New Notification",
-      `Title: ${title}\nMessage: ${message}`
-    );
+    await sendEmail("udanthaisuru@gmail.com", title, message);
 
     res.status(201).json({
       message: "Notification created successfully",
@@ -49,6 +45,6 @@ exports.createNotification = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating notification:", error);
-    res.status(500).json({ message: "Error creating notification" });
+    res.status(500).json({message: "Error creating notification"});
   }
 };
