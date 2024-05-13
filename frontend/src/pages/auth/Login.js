@@ -174,7 +174,7 @@ export default function Login() {
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}
             <a
-              href="/auth/register"
+              href="/register"
               className="font-semibold leading-6 text-green-900 hover:text-green-800"
             >
               Sign up now!
