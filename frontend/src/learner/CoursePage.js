@@ -54,7 +54,7 @@ const CoursePage = () => {
 
   return (
     <div className="container px-4 mx-auto">
-      <div className="flex flex-row object-cover justify-center w-full max-w-full px-20 py-20 rounded-lg  max-h-80 shadow-md gap-28 bg-slate-200">
+      <div className="flex flex-row justify-center object-cover w-full max-w-full px-20 py-20 rounded-lg shadow-md max-h-80 gap-28 bg-slate-200">
         <div className="mb-6 h-9 w-96">
           <img
             src={`http://localhost:4003/${course.preview.replace("\\", "/")}`}
@@ -68,16 +68,16 @@ const CoursePage = () => {
             <p className="mb-6 text-xl text-gray-600">{course.description}</p>
           </div>
 
-          <div className="flex flex-row pt-4 pb-2 px-10 border-2 rounded-lg bg-slate-100 justify-center items-center">
-            <div className="flex flex-row flex-1 justify-center gap-2 ">
+          <div className="flex flex-row items-center justify-center px-10 pt-4 pb-2 border-2 rounded-lg bg-slate-100">
+            <div className="flex flex-row justify-center flex-1 gap-2 ">
               <GiProgression />
               <p className="">{course.level}</p>
             </div>
-            <div className="flex flex-row  flex-1 gap-2 justify-center">
+            <div className="flex flex-row justify-center flex-1 gap-2">
               <FaBookReader />
               <p>{course.lessons.length}</p>lessons
             </div>
-            <div className="flex flex-row justify-center gap-2  flex-1">
+            <div className="flex flex-row justify-center flex-1 gap-2">
               <IoTime />
               <p>{course.duration}</p>
             </div>
@@ -85,18 +85,18 @@ const CoursePage = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-start justify-start w-full mt-3 px-10">
+      <div className="flex flex-row items-start justify-start w-full px-10 mt-3">
         <div className="w-3/4 py-4">
           <div className="flex flex-row">
             <button
               onClick={handleNavigation}
-              className="w-1/4 rounded-xl hover:bg-slate-100  px-4 py-2 hover:text-slate-800 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline justify-around flex flex-row "
+              className="flex flex-row justify-around w-1/4 px-4 py-2 rounded-xl hover:bg-slate-100 hover:text-slate-800 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline "
             >
               <FaLongArrowAltLeft />
               Back to Enrollments
             </button>
           </div>
-          <h2 className=" mt-8 mb-4 text-2xl font-semibold">Chapters</h2>
+          <h2 className="mt-8 mb-4 text-2xl font-semibold ">Chapters</h2>
           <LessonsList lessons={course.lessons} courseId={course._id} />
         </div>
         <div className="flex flex-col w-1/4 px-4 py-4">

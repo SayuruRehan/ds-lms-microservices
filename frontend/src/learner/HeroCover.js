@@ -4,13 +4,15 @@ import NavBar from "./NavBar";
 
 const HeroCover = () => {
   return (
-    <div className="relative inset-0 z-0 bg-center bg-cover" style={{ height: "35vh" }}>
-      
+    <div
+      className="relative inset-0 z-0 bg-center bg-cover"
+      style={{ height: "35vh" }}
+    >
       <div
-        className="absolute inset-0 z-0"
-        style={{ backgroundImage: `url(${Cover})` }}
+        className="absolute inset-0 z-0 bg-green-950"
+        // style={{ backgroundImage: `url(${Cover})` }}
       >
-        <NavBar/>
+        {/* <NavBar/> */}
         {/* <video
           className="object-cover w-full h-full"
           autoPlay

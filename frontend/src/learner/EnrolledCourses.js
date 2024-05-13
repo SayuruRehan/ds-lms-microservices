@@ -100,14 +100,14 @@ const EnrolledCourses = () => {
       <HeroCover />
 
       <div
-        className="flex justify-center gap-4"
-        style={{ backgroundImage: `url(${Cover})` }}
+        className="flex justify-center gap-4 bg-green-950"
+        // style={{ backgroundImage: `url(${Cover})` }}
       >
         <button
           className={`px-3 py-1 mr-2 text-white ${
             activeTab === "enrolled"
-              ? "bg-pink-500 rounded-lg"
-              : "hover:bg-pink-800 rounded-lg"
+              ? "bg-green-700 rounded-lg"
+              : "hover:bg-green-800 rounded-lg"
           }`}
           // style={{borderBottom:"5px solid #8f0d47"}}
           onClick={() => setActiveTab("enrolled")}
@@ -117,8 +117,8 @@ const EnrolledCourses = () => {
         <button
           className={`px-3 py-3 mr-2 text-white ${
             activeTab === "active"
-              ? "bg-pink-500 rounded-lg"
-              : "hover:bg-pink-800 rounded-lg"
+            ? "bg-green-700 rounded-lg"
+            : "hover:bg-green-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("active")}
         >
@@ -127,8 +127,8 @@ const EnrolledCourses = () => {
         <button
           className={`px-3 py-1 text-white rounded ${
             activeTab === "completed"
-              ? "bg-pink-500 rounded-lg"
-              : "hover:bg-pink-800 rounded-lg"
+            ? "bg-green-700 rounded-lg"
+            : "hover:bg-green-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("completed")}
         >

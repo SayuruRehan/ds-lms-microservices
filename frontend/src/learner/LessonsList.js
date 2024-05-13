@@ -18,9 +18,9 @@ const LessonsList = ({ lessons, courseId }) => {
           `http://localhost:4002/learner/enrollments/${learnerId}`
         );
 
-        console.log("------------ " + response.data.enrolledCourses);
+        console.log("------------ " + response);
         console.log("Course ID: " + courseId);
-        console.log("Learner ID: " + `${learnerId}`)
+        console.log("Learner ID: " + `${learnerId}`);
 
         if (response.data && response.data.enrolledCourses) {
           const enrolledCourse = response.data.enrolledCourses.find(
