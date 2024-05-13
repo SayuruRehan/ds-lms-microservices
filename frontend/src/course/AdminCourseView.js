@@ -87,7 +87,7 @@ function AdminCourseView() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-semibold mb-6">Course List</h1>
+      {/* <h1 className="text-3xl font-semibold mb-6">Course List</h1> */}
       <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2">
         {courses.map((course, index) => (
           <div

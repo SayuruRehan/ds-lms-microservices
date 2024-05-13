@@ -54,7 +54,9 @@ function CourseList() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:4003/api/v1/course/delete/${courseToDelete}`);
+      await axios.delete(
+        `http://localhost:4003/api/v1/course/delete/${courseToDelete}`
+      );
       // After successful deletion, fetch the updated course list
       fetchCourses();
       // Close the confirmation modal
@@ -78,6 +80,14 @@ function CourseList() {
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-semibold mb-6">Course List</h1>
+
+      {/* Add Course Button */}
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4"
+        onClick={() => navigate("/addCourse")}
+      >
+        Add Course
+      </button>
       {/* Tab navigation */}
       <div className="flex mb-4">
         <button
