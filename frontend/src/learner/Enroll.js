@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EnrollBackground from "../assets/enroll.jpg";
 import HeroCover from "./HeroCover";
 import NavBar from "./NavBar";
-import {GiProgression} from "react-icons/gi";
-import {IoTime} from "react-icons/io5";
-import {FaBookReader} from "react-icons/fa";
+import { GiProgression } from "react-icons/gi";
+import { IoTime } from "react-icons/io5";
+import { FaBookReader } from "react-icons/fa";
 import Modal from "./Modal";
 
 const Enroll = () => {
@@ -50,7 +50,7 @@ const Enroll = () => {
     try {
       const response = await axios.post(
         `http://localhost:4002/learner/course/enroll?courseId=${course._id}`,
-        {learnerId}
+        { learnerId }
       );
 
       console.log(response.data.message);
@@ -108,13 +108,13 @@ const Enroll = () => {
     <div className="container px-4 mx-auto">
       <div
         className="relative inset-0 z-0 bg-center bg-cover"
-        style={{height: "50vh"}}
+        style={{ height: "40vh" }}
       >
         <div
-          className="absolute inset-0 z-0 bg-gray-800"
+          className="absolute inset-0 z-0 bg-green-900"
           //   style={{ backgroundImage: `url(${EnrollBackground})` }}
         >
-          <NavBar />
+          {/* <NavBar /> */}
         </div>
         <header className="absolute px-10 mb-2 top-10 md:top-52">
           <div className="items-start justify-center text-center">
@@ -133,7 +133,7 @@ const Enroll = () => {
             className="overflow-hidden bg-white rounded-lg shadow-lg"
           >
             <img
-              className="object-cover object-center shadow-lg w-full h-40"
+              className="object-cover object-center w-full h-40 shadow-lg"
               src={`http://localhost:4003/${course.preview.replace("\\", "/")}`}
               alt={course.CourseName}
             />
@@ -145,32 +145,32 @@ const Enroll = () => {
                 </h3>
               </div>
 
-              <div className="flex flex-row  ">
-                <div className="flex flex-row flex-1 justify-left gap-1 ">
+              <div className="flex flex-row ">
+                <div className="flex flex-row flex-1 gap-1 justify-left ">
                   <GiProgression />
                   <p className="">{course.level}</p>
                 </div>
-                <div className="flex flex-row  flex-1 gap-1 justify-left">
+                <div className="flex flex-row flex-1 gap-1 justify-left">
                   <FaBookReader />
                   <p>{course.lessons.length}</p>lessons
                 </div>
-                <div className="flex flex-row justify-left gap-1  flex-1">
+                <div className="flex flex-row flex-1 gap-1 justify-left">
                   <IoTime />
                   <p>{course.duration}</p>
                 </div>
               </div>
 
-              <div className="flex flex-row justify-around gap-1  item-center ">
-                <div className="flex flex-row justify-centeritems-center p-0">
+              <div className="flex flex-row justify-around gap-1 item-center ">
+                <div className="flex flex-row p-0 justify-centeritems-center">
                   <p className="text-xl font-bold text-stone-900 ">
-                    Rs.{course.price}/=
+                    LKR.{course.price}
                   </p>
                 </div>
                 <div>
                   <Link
                     // to={`/courses/${course._courseId}`}
                     onClick={() => handleEnroll(course)}
-                    className="items-center justify-center block px-4 py-2 font-bold text-center text-gray-800 bg-gray-200 rounded tex-center hover:bg-gray-800 focus:outline-none focus:shadow-outline border-2 border-gray-950 hover:text-gray-100"
+                    className="items-center justify-center block px-4 py-2 font-bold text-center text-gray-800 bg-gray-200 border-2 rounded tex-center hover:bg-gray-800 focus:outline-none focus:shadow-outline border-gray-950 hover:text-gray-100"
                   >
                     Enroll me
                   </Link>
@@ -184,7 +184,7 @@ const Enroll = () => {
       {/* Modal */}
       {modalOpen && (
         <Modal closeModal={closeModal}>
-          <h2 className="text-xl font-sans font-bold">
+          <h2 className="font-sans text-xl font-bold">
             {selectedCourse.CourseName}
           </h2>
           <img
@@ -193,16 +193,16 @@ const Enroll = () => {
               "/"
             )}`}
           />
-          <div className="flex flex-row pt-2 pb-1 px-2 rounded-lg justify-around items-center">
-            <div className="flex flex-row flex-1 justify-center gap-1 ">
+          <div className="flex flex-row items-center justify-around px-2 pt-2 pb-1 rounded-lg">
+            <div className="flex flex-row justify-center flex-1 gap-1 ">
               <GiProgression />
               <p className="">{selectedCourse.level}</p>
             </div>
-            <div className="flex flex-row  flex-1 gap-1 justify-center">
+            <div className="flex flex-row justify-center flex-1 gap-1">
               <FaBookReader />
               <p>{selectedCourse.lessons.length}</p>lessons
             </div>
-            <div className="flex flex-row justify-center gap-1  flex-1">
+            <div className="flex flex-row justify-center flex-1 gap-1">
               <IoTime />
               <p>{selectedCourse.duration}</p>
             </div>
@@ -214,20 +214,20 @@ const Enroll = () => {
           <div className="py-2 pb-2 text-justify">
             {selectedCourse.description}
           </div>
-          <div className="flex pt-2 flex-row  justify-between">
+          <div className="flex flex-row justify-between pt-2">
             <p>Price</p>
-            <p className=" text-lg  font-sans font-bold">
+            <p className="font-sans text-lg font-bold ">
               Rs. {selectedCourse.price}/=
             </p>
           </div>
           <button
-            className="py-2 px-5 text-white w-full bg-green-600"
+            className="w-full px-5 py-2 text-white bg-green-600"
             onClick={() => confirmEnroll(selectedCourse)}
           >
             Confirm Enrollment
           </button>
           <button
-            className="py-2 mt-2 px-5 text-white w-full bg-blue-600"
+            className="w-full px-5 py-2 mt-2 text-white bg-blue-600"
             onClick={() => callPayment(selectedCourse)}
           >
             Proceed to Payment
