@@ -161,7 +161,7 @@ const EnrolledCourses = () => {
               </p>
               <div className="h-4 mb-2 overflow-hidden bg-gray-200 rounded-lg">
                 <div
-                  className="h-full bg-blue-500"
+                  className="h-full bg-green-700"
                   style={{ width: `${course.progress}%` }}
                 ></div>
               </div>
@@ -170,7 +170,7 @@ const EnrolledCourses = () => {
               <Link
                 to={`/courses/${course.courseId}`}
                 onClick={() => handleContinueLearning(course)}
-                className="block px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                className="block px-4 py-2 font-bold text-white bg-green-700 rounded hover:bg-green-950 focus:outline-none focus:shadow-outline"
               >
                 Continue Learning
               </Link>
