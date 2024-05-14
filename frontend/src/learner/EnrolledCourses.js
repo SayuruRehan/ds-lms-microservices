@@ -33,6 +33,7 @@ const EnrolledCourses = () => {
         const combinedCourses = enrolledCourses.map((course, index) => {
           const courseDetails = courseDetailsResponses[index].data;
           const previewPath = courseDetails.preview.replace(/\\/g, "/");
+          const lessonsCompleted = course.lessonsCompleted;
           const lectureVideosPath = courseDetails.lectureVideos.replace(
             /\\/g,
             "/"
@@ -55,11 +56,12 @@ const EnrolledCourses = () => {
             status: courseDetails.status,
             preview: courseDetails.preview,
             lessons: courseDetails.lessons,
-            lessonsCompleted: course.lessonsCompleted,
+            lessonsCompleted: lessonsCompleted,
           };
         });
 
         setCourses(combinedCourses);
+       console.log(courses)
         filterCourses("enrolled"); // Set initial filtered courses to all enrolled courses
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);

@@ -90,14 +90,18 @@ const CoursePage = () => {
           <div className="flex flex-row">
             <button
               onClick={handleNavigation}
-              className="flex flex-row justify-around w-1/4 px-4 py-2 rounded-xl hover:bg-slate-100 hover:text-slate-800 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline "
+              className="flex flex-row justify-around w-1/4 px-4 py-2 rounded-xl hover:bg-green-950 hover:text-slate-100 hover:boder-2 hover:boder-slate-200 border-slate-900 text-slate-100 bg-slate-800 focus:outline-none focus:shadow-outline "
             >
               <FaLongArrowAltLeft />
               Back to Enrollments
             </button>
           </div>
           <h2 className="mt-8 mb-4 text-2xl font-semibold ">Chapters</h2>
-          <LessonsList lessons={course.lessons} courseId={course._id} />
+          <LessonsList
+            lessons={course.lessons}
+            courseId={course._id}
+            lessonsCompleted={course.lessonsCompleted}
+          />
         </div>
         <div className="flex flex-col w-1/4 px-4 py-4">
           <button
@@ -113,8 +117,6 @@ const CoursePage = () => {
           />
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };
