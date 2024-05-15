@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 
 import Home from "./components/Background/Home";
 import Login from "./pages/auth/Login";
@@ -26,6 +26,7 @@ import AddCourseForm from "./course/AddCourseForm";
 import CourseList from "./course/CourseList";
 import AdminCourseView from "./course/AdminCourseView";
 import EditCourseForm from "./course/EditCourseForm";
+import LearnerProgress from "./learner/LearnerProgress";
 
 export default function App() {
   const [tokenCookie] = useCookies(["token"]);
@@ -90,6 +91,7 @@ export default function App() {
                   />
                   <Route path="/enroll/success" element={<Success />} />
                   <Route path="/enroll/unsuccess" element={<Unsuccess />} />
+                  <Route path="/myProgress" element={<LearnerProgress />} />
                 </>
               ) : null}
             </>

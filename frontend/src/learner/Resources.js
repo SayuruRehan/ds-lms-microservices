@@ -24,36 +24,40 @@ const Resources = ({ lectureNotes, lectureVideos }) => {
       <h2 className="mb-4 text-lg font-semibold">Resources</h2>
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row flex-grow gap-1 text-center">
-          <p className="mr-2 text-gray-700">Lecture Notes</p>
-          {/* <FaEye
-            className="ml-4 mr-2 text-blue-500 cursor-pointer"
-            onClick={() => handleNotesView(lectureNotes)}
-          /> */}
-          {lectureNotes && (
-            <a
-              href={`http://localhost:4003/${lectureNotes.replace("\\", "/")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View PDF
-            </a>
-          )}
-          {/* <FaDownload
-            className="mr-2 text-green-500 cursor-pointer"
-            onClick={() => handleNotesDownload(lectureNotes)}
-          /> */}
-          <p className="mr-2 text-gray-700">Lecture Notes</p>
-          {lectureVideos && (
-            <a
-              href={`http://localhost:4003/${lectureVideos.replace("\\", "/")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              View Video
-            </a>
-          )}
+          <div className="flex flex-col">
+            <div className="flex flex-row ">
+              <p className="mr-2 text-gray-700">Lecture Notes</p>
+              {lectureNotes && (
+                <a
+                  href={`http://localhost:4003/${lectureNotes.replace(
+                    "\\",
+                    "/"
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  View PDF
+                </a>
+              )}
+            </div>
+            <div className="flex flex-row ">
+              <p className="mr-2 text-gray-700">Lecture Notes</p>
+              {lectureVideos && (
+                <a
+                  href={`http://localhost:4003/${lectureVideos.replace(
+                    "\\",
+                    "/"
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  View Video
+                </a>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-grow gap-1 text-center">
