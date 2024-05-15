@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import EnrollBackground from "../assets/enroll.jpg";
 import HeroCover from "./HeroCover";
 import NavBar from "./NavBar";
-import { GiProgression } from "react-icons/gi";
-import { IoTime } from "react-icons/io5";
-import { FaBookReader } from "react-icons/fa";
+import {GiProgression} from "react-icons/gi";
+import {IoTime} from "react-icons/io5";
+import {FaBookReader} from "react-icons/fa";
 import Modal from "./Modal";
 
 const Enroll = () => {
@@ -50,13 +50,39 @@ const Enroll = () => {
     try {
       const response = await axios.post(
         `http://localhost:4002/learner/course/enroll?courseId=${course._id}`,
-        { learnerId }
+        {learnerId}
       );
 
       console.log(response.data.message);
 
       if (response.status === 200) {
         navigate("/enroll/success"); // direct to payment api
+      } else {
+        navigate("/enroll/unsuccess");
+      }
+    } catch (error) {
+      console.error("Error enrolling:", error);
+      // Handle error
+    }
+  };
+
+  const confirmEnrollBtn = async (course) => {
+    // localStorage.setItem("courseData", JSON.stringify(course));
+
+    const learnerId = "123f55396a149b001f8a1234";
+    console.log("call proceed to payment");
+    console.log("Enrolled to " + course._id);
+    try {
+      const response = await axios.post(
+        `http://localhost:4002/learner/course/enroll?courseId=${course._id}`,
+        {learnerId}
+      );
+
+      console.log(response.data.message);
+
+      if (response.status === 200) {
+        alert("You have successfully enrolled to this course");
+        navigate("/enrolledCourses"); // direct to payment api
       } else {
         navigate("/enroll/unsuccess");
       }
@@ -108,7 +134,7 @@ const Enroll = () => {
     <div className="container px-4 mx-auto">
       <div
         className="relative inset-0 z-0 bg-center bg-cover"
-        style={{ height: "40vh" }}
+        style={{height: "40vh"}}
       >
         <div
           className="absolute inset-0 z-0 bg-green-900"
@@ -222,7 +248,7 @@ const Enroll = () => {
           </div>
           <button
             className="w-full px-5 py-2 text-white bg-green-600"
-            onClick={() => confirmEnroll(selectedCourse)}
+            onClick={() => confirmEnrollBtn(selectedCourse)}
           >
             Confirm Enrollment
           </button>
