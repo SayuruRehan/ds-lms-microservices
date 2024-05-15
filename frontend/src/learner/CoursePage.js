@@ -40,11 +40,30 @@ const CoursePage = () => {
       );
 
       alert("You unenrolled successfully"); // Success alert
+
+      // Make request to local notification microservice
+
+      await axios.post(
+        "http://localhost:4005/api/v1/notification/add",
+        {
+          title: "Successfull Unenrollment",
+          message: "You are successfuly unenrolled from the course",
+          role: "admin",
+        },
+        {
+          headers: {
+            Authorization:
+              "Key here", // Replace with your SendGrid API key
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       navigate("/enrolledCourses");
       console.log(response.data.message); // Log success message
     } catch (error) {
-      console.error("Error unenrolling:", error);
-      alert("Error unenrolling"); // Error alert
+      // console.error("Error unenrolling:", error);
+      //alert("Error unenrolling"); // Error alert
     }
   };
 
