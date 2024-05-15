@@ -37,7 +37,7 @@ exports.createNotification = async (req, res) => {
     await newNotification.save();
 
     // Send email notification
-    await sendEmail("udanthaisuru@gmail.com", title, message);
+    await sendEmail("kavi.fernando2001@gmail.com", title, message);
 
     res.status(201).json({
       message: "Notification created successfully",
