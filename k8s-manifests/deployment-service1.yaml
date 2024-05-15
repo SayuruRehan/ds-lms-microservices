@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: authentication-microservice
+  template:
+    metadata:
+      labels:
+        app: authentication-microservice
+    spec:
+      containers:
+        - name: authentication-microservice
+          image: authentication-microservice:latest
+          ports:
+            - containerPort: 4001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication-microservice
+spec:
+  selector:
+    app: authentication-microservice
+  ports:
+    - protocol: TCP
+      port: 4001
+      targetPort: 4001
+  type: ClusterIP
