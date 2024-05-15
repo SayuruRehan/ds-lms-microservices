@@ -43,7 +43,7 @@ const LessonsList = ({ lessons, lessonsCompleted }) => {
         </div>
       )}
 
-      <div className="h-4 mb-2 overflow-hidden bg-gray-200 rounded-lg">
+      <div className="h-4 mb-2 overflow-hidden bg-gray-200 ">
         <div
           className="h-full bg-green-700 progressBar"
           style={{ width: `${progress}%` }}
@@ -59,7 +59,9 @@ const LessonsList = ({ lessons, lessonsCompleted }) => {
             className="flex items-center justify-between p-4 bg-white rounded shadow"
           >
             <div>
-              <h3 className="mb-2 text-lg font-semibold">{lesson.title}</h3>
+              <h3 className="mb-2 text-lg font-semibold">{`Lesson ${
+                index + 1
+              }: ${lesson.title}`}</h3>
               <p className="text-gray-700">{lesson.description}</p>
             </div>
             <div>

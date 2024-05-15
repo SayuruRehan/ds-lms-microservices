@@ -61,7 +61,7 @@ const EnrolledCourses = () => {
         });
 
         setCourses(combinedCourses);
-       console.log(courses)
+        console.log(courses);
         filterCourses("enrolled"); // Set initial filtered courses to all enrolled courses
       } catch (error) {
         console.error("Error fetching enrolled courses:", error);
@@ -119,8 +119,8 @@ const EnrolledCourses = () => {
         <button
           className={`px-3 py-3 mr-2 text-white ${
             activeTab === "active"
-            ? "bg-green-700 rounded-lg"
-            : "hover:bg-green-800 rounded-lg"
+              ? "bg-green-700 rounded-lg"
+              : "hover:bg-green-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("active")}
         >
@@ -129,8 +129,8 @@ const EnrolledCourses = () => {
         <button
           className={`px-3 py-1 text-white rounded ${
             activeTab === "completed"
-            ? "bg-green-700 rounded-lg"
-            : "hover:bg-green-800 rounded-lg"
+              ? "bg-green-700 rounded-lg"
+              : "hover:bg-green-800 rounded-lg"
           }`}
           onClick={() => setActiveTab("completed")}
         >
@@ -139,7 +139,15 @@ const EnrolledCourses = () => {
       </div>
 
       {/* Display enrolled courses */}
-      <div className="grid grid-cols-1 gap-4 p-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="flex justify-end py-6 pr-6">
+        <Link
+          to="/myProgress"
+          className="px-10 py-2 font-medium text-white rounded-md bg-green-950 text-md hover:bg-green-800"
+        >
+          View My Progress
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 gap-4 px-8 py-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredCourses.map((course) => (
           <div
             key={course.courseId}
@@ -161,13 +169,13 @@ const EnrolledCourses = () => {
               <p className="mb-2 text-gray-700">
                 Completed Lessons: {course.lessonsCompleted.length}
               </p>
-              <div className="h-4 mb-2 overflow-hidden bg-gray-200 rounded-lg">
+              {/* <div className="h-2 mb-2 overflow-hidden bg-gray-200 rounded-lg">
                 <div
                   className="h-full bg-green-700"
                   style={{ width: `${course.progress}%` }}
                 ></div>
               </div>
-              <p className="mb-2 text-gray-700">{course.progress}% Completed</p>
+              <p className="mb-2 text-gray-700">{course.progress}% Completed</p> */}
 
               <Link
                 to={`/courses/${course.courseId}`}

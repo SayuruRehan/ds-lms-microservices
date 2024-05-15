@@ -110,7 +110,7 @@ const CoursePage = () => {
           >
             Unenroll
           </button>
-          <Progress progress={course.progress} course={course} />
+          {/* <Progress progress={course.progress} course={course} /> */}
           <Resources
             lectureNotes={course.lectureNotes}
             lectureVideos={course.lectureVideos}
