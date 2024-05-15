@@ -50,3 +50,10 @@ To set up the system locally for development or testing, follow these step-by-st
 - Ensure all services are built and running without errors before using the application.
 - Troubleshoot any deployment issues promptly.
 - For production deployment, additional configurations and steps may be necessary.
+
+
+CODE MODIFICATION
+- Please add your SendGrid API key in the frontend directory -> src -> lerner -> CoursePage.js line number 56
+- Please update the .env in the notification-microservice directory with the following properties.
+     - SENDGRID_API_KEY=Add your key here
+     - SENDGRID_API_EMAIL=Add the sender's API key here
