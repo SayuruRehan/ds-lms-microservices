@@ -86,7 +86,6 @@ router.post(
 );
 
 // Route to retrieve all courses
-// Route to retrieve all courses
 router.get("/get", async (req, res) => {
   try {
     const courses = await Course.find();
