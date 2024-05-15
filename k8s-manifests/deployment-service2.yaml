@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-microservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: course-microservice
+  template:
+    metadata:
+      labels:
+        app: course-microservice
+    spec:
+      containers:
+        - name: course-microservice
+          image: course-microservice:latest
+          ports:
+            - containerPort: 4003
+          volumeMounts:
+            - mountPath: /lectures
+              name: lectures-volume
+            - mountPath: /preview
+              name: preview-volume
+            - mountPath: /videos
+              name: videos-volume
+      volumes:
+        - name: lectures-volume
+          hostPath:
+            path: /path/to/local/Lectures
+        - name: preview-volume
+          hostPath:
+            path: /path/to/local/Preview
+        - name: videos-volume
+          hostPath:
+            path: /path/to/local/Videos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: course-microservice
+spec:
+  selector:
+    app: course-microservice
+  ports:
+    - protocol: TCP
+      port: 4003
+      targetPort: 4003
+  type: ClusterIP

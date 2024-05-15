@@ -3,6 +3,7 @@ const router = express.Router();
 const Course = require("../models/Course");
 const path = require("path");
 const multer = require("multer");
+const axios = require("axios");
 
 // Multer configuration
 const storage = multer.diskStorage({
@@ -88,8 +89,17 @@ router.post(
 router.get("/get", async (req, res) => {
   try {
     const courses = await Course.find();
+
+    // Make request to local notification microservice
+    await axios.post("http://localhost:4005/api/v1/notification/add", {
+      title: "New Courses Available",
+      message: "New courses are available for you to explore!",
+      role: "admin", // Assuming admin role for notification
+    });
+
     res.status(200).send(courses);
   } catch (error) {
+    console.error("Error fetching courses:", error);
     res.status(500).send({ error: "Error fetching courses" });
   }
 });
@@ -148,11 +158,16 @@ router.post("/approve/:courseId", async (req, res) => {
       { status: "approved" },
       { new: true }
     );
-
     // Check if the course exists
     if (!course) {
       return res.status(404).send({ error: "Course not found" });
     }
+    // Make request to local notification microservice
+    await axios.post("http://localhost:4005/api/v1/notification/add", {
+      title: "New Course Approved",
+      message: "New approved course is available for you to explore!",
+      role: "admin", // Assuming admin role for notification
+    });
 
     // If the course exists, send it as a response
     res.status(200).send({ message: "Course approved successfully", course });
@@ -177,6 +192,13 @@ router.post("/reject/:courseId", async (req, res) => {
     if (!course) {
       return res.status(404).send({ error: "Course not found" });
     }
+
+    // Make request to local notification microservice
+    await axios.post("http://localhost:4005/api/v1/notification/add", {
+      title: "New Course Rejected",
+      message: "New rejected course is available for you to explore!",
+      role: "admin", // Assuming admin role for notification
+    });
 
     // If the course exists, send it as a response
     res.status(200).send({ message: "Course rejected successfully", course });
